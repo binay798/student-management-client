@@ -1,0 +1,18 @@
+.admin {
+  display: flex;
+  height: 100vh;
+  &__sidebar {
+    width: 25rem;
+    background-color: var(--color-dark);
+    height: 100%;
+  }
+
+  &__main {
+    flex: 1;
+    background-color: #eee;
+
+    &__header {
+      padding: 2rem;
+    }
+  }
+}

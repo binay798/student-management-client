@@ -1,0 +1,36 @@
+.login {
+  padding: 3rem 2rem;
+  max-width: 45rem;
+  width: 100%;
+
+  a:link,
+  a:visited {
+    display: block;
+    margin-top: 2rem;
+    text-align: center;
+  }
+
+  &__tab {
+    font-size: 1.6rem !important;
+    flex: 1;
+    text-transform: none !important;
+  }
+
+  &__form {
+    margin-top: 5rem;
+
+    &__inp {
+      width: 100%;
+      margin-bottom: 2rem !important;
+      & > * {
+        font-size: 1.6rem !important;
+      }
+    }
+
+    &__btn {
+      width: 100%;
+      font-size: 1.6rem !important;
+      text-transform: none;
+    }
+  }
+}
