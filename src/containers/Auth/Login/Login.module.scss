@@ -2,12 +2,12 @@
   padding: 3rem 2rem;
   max-width: 45rem;
   width: 100%;
-
+  text-align: center;
+  
   a:link,
   a:visited {
-    display: block;
+    display: inline-block;
     margin-top: 2rem;
-    text-align: center;
   }
 
   &__tab {

@@ -1,2 +1,27 @@
 .dashboard {
+  &__top {
+    display: flex;
+    gap: 2rem;
+
+    &__item {
+      flex: 1;
+      padding: 2rem 1rem;
+
+      svg {
+        width: 10rem;
+        height: 10rem;
+        fill: white;
+      }
+
+      &:nth-child(1) {
+        background-image: linear-gradient(to right bottom, #7cecff, #0e7d90);
+      }
+      &:nth-child(2) {
+        background-image: linear-gradient(to right bottom, #bcfbb5, #58d24a);
+      }
+      &:nth-child(3) {
+        background-image: linear-gradient(to right bottom, #ffe1b1, #cc953c);
+      }
+    }
+  }
 }
