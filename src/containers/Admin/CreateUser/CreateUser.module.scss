@@ -1,0 +1,32 @@
+.user {
+  padding: 1rem;
+  min-height: 83vh;
+  color: #666 !important;
+
+  &__head {
+    font-size: 3rem;
+    font-weight: 300;
+    margin-bottom: 3rem;
+  }
+
+  &__form {
+    width: 50vw;
+    &__top {
+      display: flex;
+      gap: 2rem;
+    }
+
+    &__bottom {
+      display: flex;
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+  }
+
+  &__inp {
+    width: 100% !important;
+    & > * {
+      font-size: 1.4rem !important;
+    }
+  }
+}

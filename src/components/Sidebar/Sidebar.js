@@ -37,6 +37,14 @@ function Sidebar() {
           <span>Teachers</span>
         </NavLink>
         <NavLink
+          to='/admin/createUser'
+          className={classes.sidebar__item}
+          activeClassName={classes.active}
+        >
+          <Icon name='user' />
+          <span>Create user</span>
+        </NavLink>
+        <NavLink
           to='/admin/events'
           className={classes.sidebar__item}
           activeClassName={classes.active}

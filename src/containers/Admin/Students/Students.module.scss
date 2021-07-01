@@ -1,2 +1,74 @@
 .students {
+  padding: 1rem;
+  min-height: 83vh;
+  color: #666 !important;
+
+  &__top {
+    margin-bottom: 3rem;
+
+    h3 {
+      font-weight: 300;
+      margin-bottom: 1.5rem;
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+  }
+
+  &__create {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    button {
+      font-size: 1.6rem !important;
+      text-transform: none !important;
+    }
+  }
+
+  &__head {
+    font-size: 3rem;
+    font-weight: 300;
+  }
+
+  &__search {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 2rem;
+
+    &__inp {
+      margin-left: auto !important;
+    }
+    &__inp > * {
+      font-size: 1.6rem !important;
+    }
+
+    button {
+      font-size: 1.6rem;
+      text-transform: none;
+    }
+  }
+}
+
+.filter {
+  display: flex;
+  gap: 2rem;
+
+  &__option {
+    font-size: 1.4rem !important;
+    font-weight: 400 !important;
+    text-transform: none;
+    color: #666;
+    min-width: 13rem !important;
+  }
+}
+
+.tableCell {
+  font-size: 1.8rem !important;
+  color: #666 !important;
+}
+
+.menuItem {
+  font-size: 1.4rem !important;
 }

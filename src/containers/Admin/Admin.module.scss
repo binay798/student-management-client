@@ -7,6 +7,10 @@
     height: 100%;
   }
 
+  &__menuItem {
+    font-size: 1.4rem !important;
+  }
+
   &__main {
     flex: 1;
     background-color: #eee;
@@ -19,10 +23,15 @@
       justify-content: space-between;
 
       &__profile {
-        display: flex;
-        gap: 1rem;
-        align-items: center;
-        color: gray;
+        span {
+          display: flex;
+          gap: 1rem;
+          align-items: center;
+          color: gray;
+          text-transform: none;
+          font-size: 1.4rem;
+          font-weight: 400;
+        }
       }
     }
   }

@@ -6,6 +6,22 @@
     &__item {
       flex: 1;
       padding: 2rem 1rem;
+      display: flex;
+      gap: 2rem;
+      & > * {
+        color: white;
+      }
+
+      & > div {
+        h2 {
+        }
+
+        h3 {
+          text-align: center;
+          font-size: 5rem;
+          font-weight: 400;
+        }
+      }
 
       svg {
         width: 10rem;
@@ -20,8 +36,32 @@
         background-image: linear-gradient(to right bottom, #bcfbb5, #58d24a);
       }
       &:nth-child(3) {
-        background-image: linear-gradient(to right bottom, #ffe1b1, #cc953c);
+        background-image: linear-gradient(to right bottom, #8472d8, #291d63);
       }
+    }
+  }
+
+  &__bottom {
+    margin-top: 4rem;
+  }
+}
+
+.topStudents {
+  flex: 1;
+  &__tableRow {
+    & > * {
+      font-size: 1.8rem !important;
+      color: #333 !important;
+      font-weight: 400 !important;
+    }
+  }
+
+  &__tableCell {
+    & > * {
+      font-size: 1.4rem !important;
+      color: #666 !important;
+      font-weight: 400 !important;
+      padding: 0.8rem 1.6rem !important;
     }
   }
 }
