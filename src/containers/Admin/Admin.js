@@ -14,6 +14,10 @@ import Sidebar from '../../components/Sidebar/Sidebar';
 import Avatar from '@material-ui/core/Avatar';
 import { Menu, MenuItem, Button } from '@material-ui/core';
 import CreateUser from './CreateUser/CreateUser';
+import User from './User/User';
+
+export const imgUrl =
+  'https://blogs-images.forbes.com/danschawbel/files/2017/12/Dan-Schawbel_avatar_1512422077-400x400.jpg';
 
 function Admin() {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -37,8 +41,8 @@ function Admin() {
             onClick={handleClick}
             className={classes.admin__main__header__profile}
           >
-            <Avatar src='https://blogs-images.forbes.com/danschawbel/files/2017/12/Dan-Schawbel_avatar_1512422077-400x400.jpg' />
-            <span>Angelina</span>
+            <Avatar src={imgUrl} />
+            <span>Mark</span>
           </Button>
           <Menu
             id='simple-menu'
@@ -75,6 +79,7 @@ function Admin() {
             <Route path='/admin/students' component={Students} />
             <Route path='/admin/teachers' component={Teachers} />
             <Route path='/admin/createUser' component={CreateUser} />
+            <Route path='/admin/user/:id' component={User} />
 
             <Route path='/' component={Dashboard} />
           </Switch>

@@ -1,0 +1,38 @@
+.user {
+  padding: 1rem;
+  min-height: 83vh;
+  color: #666 !important;
+
+  &__head {
+    font-size: 3rem;
+    font-weight: 300;
+    margin-bottom: 1rem;
+  }
+  &__container {
+    display: flex;
+    gap: 5rem;
+  }
+
+  &__desc {
+    flex: 3;
+    width: 100%;
+
+    &__container {
+      font-size: 1.9rem;
+    }
+
+    &__content {
+      display: grid;
+      grid-template-columns: 1fr 4fr;
+      margin-bottom: 1rem;
+    }
+  }
+
+  &__img {
+    flex: 1.5;
+    img {
+      display: block;
+      width: 100%;
+    }
+  }
+}

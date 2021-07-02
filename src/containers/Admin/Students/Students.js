@@ -10,9 +10,8 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import TableHead from '@material-ui/core/TableHead';
 import TextField from '@material-ui/core/TextField';
-import { Button } from '@material-ui/core';
+import { Button, FormControl, InputLabel, Select } from '@material-ui/core';
 import Icon from './../../../components/UI/Icon/Icon';
-import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import TableData from '../../../components/TableData/TableData';
 
@@ -192,43 +191,37 @@ function Filter() {
 }
 
 function FilterOptions(props) {
-  const [anchorEl, setAnchorEl] = React.useState(null);
-
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  const [age, setAge] = React.useState('');
   return (
     <div>
-      <Button
-        variant='outlined'
-        onClick={handleClick}
-        className={classes.filter__option}
-      >
-        {props.name}
-      </Button>
-      <Menu
-        id='simple-menu'
-        anchorEl={anchorEl}
-        keepMounted
-        open={Boolean(anchorEl)}
-        onClose={handleClose}
-      >
-        {props.options.map((item, id) => {
-          return (
-            <MenuItem
-              key={id}
-              className={classes.menuItem}
-              onClick={handleClose}
-            >
-              {item}
-            </MenuItem>
-          );
-        })}
-      </Menu>
+      <FormControl variant='outlined' className={classes.filter__option}>
+        <InputLabel
+          style={{ fontSize: '1.4rem' }}
+          id='demo-simple-select-outlined-label'
+        >
+          {props.name}
+        </InputLabel>
+        <Select
+          labelId='demo-simple-select-outlined-label'
+          id='demo-simple-select-outlined'
+          value={age}
+          onChange={(e) => setAge(e.target.value)}
+          label={props.name}
+        >
+          <MenuItem value='' style={{ fontSize: '1.4rem' }}>
+            <em>None</em>
+          </MenuItem>
+          <MenuItem value={10} style={{ fontSize: '1.4rem' }}>
+            Ten
+          </MenuItem>
+          <MenuItem value={20} style={{ fontSize: '1.4rem' }}>
+            Twenty
+          </MenuItem>
+          <MenuItem value={30} style={{ fontSize: '1.4rem' }}>
+            Thirty
+          </MenuItem>
+        </Select>
+      </FormControl>
     </div>
   );
 }
