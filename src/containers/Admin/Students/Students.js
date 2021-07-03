@@ -159,7 +159,7 @@ function StickyHeadTable() {
               .map((row, id) => {
                 return (
                   <TableRow key={id} hover role='checkbox' tabIndex={-1}>
-                    <TableData {...row} />
+                    <TableData {...row} type='user' />
                   </TableRow>
                 );
               })}

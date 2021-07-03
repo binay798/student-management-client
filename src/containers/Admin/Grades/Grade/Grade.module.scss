@@ -1,0 +1,40 @@
+.grade {
+  padding: 1rem;
+  min-height: 83vh;
+  color: #666 !important;
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__head {
+    font-size: 3rem;
+    font-weight: 300;
+  }
+
+  &__top {
+    display: flex;
+    margin-top: 4rem;
+    gap: 2rem;
+    &__left {
+      flex: 1.5;
+      // background-color: aqua;
+    }
+
+    &__right {
+      flex: 1;
+      // background-color: coral;
+    }
+  }
+}
+
+.chip {
+  font-size: 1.3rem !important;
+  padding: 0 1rem !important;
+  font-weight: 600 !important;
+}
+.table {
+  font-size: 1.4rem !important;
+  padding: 0.8rem 1.6rem !important;
+}

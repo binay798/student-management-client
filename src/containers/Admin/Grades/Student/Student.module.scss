@@ -1,0 +1,74 @@
+.student {
+  padding: 1rem;
+  min-height: 83vh;
+  color: #666 !important;
+
+  &__head {
+    font-size: 3rem;
+    font-weight: 300;
+    margin-bottom: 1rem;
+  }
+  &__container {
+    display: flex;
+    gap: 5rem;
+    align-items: flex-start;
+    margin-bottom: 4rem;
+  }
+
+  &__desc {
+    flex: 3;
+    width: 100%;
+
+    &__container {
+      font-size: 1.9rem;
+    }
+
+    &__content {
+      display: grid;
+      grid-template-columns: 1fr 4fr;
+      margin-bottom: 1rem;
+    }
+  }
+
+  &__img {
+    flex: 1.5;
+    img {
+      display: block;
+      width: 100%;
+      border: 1px solid rgb(173, 172, 172);
+      padding: 0.5rem;
+      border-radius: 4px;
+      object-fit: cover;
+    }
+  }
+}
+
+.resAndPay {
+  display: flex;
+  gap: 2rem;
+  &__left {
+    flex: 1;
+  }
+
+  &__right {
+    flex: 1;
+  }
+}
+
+.results {
+  &__head {
+    display: flex;
+    gap: 3rem;
+  }
+}
+
+.btn {
+  font-size: 1.4rem !important;
+  text-transform: none !important;
+}
+.payments {
+  &__head {
+    display: flex;
+    gap: 3rem;
+  }
+}

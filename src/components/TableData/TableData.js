@@ -26,7 +26,7 @@ function TableData(props) {
       </TableCell>
       <TableCell className={classes.table} align='right'>
         <div>
-          <Link to='/admin/user/dasf'>
+          <Link to={`/admin/${props.type}/dsaf`}>
             <IconButton>
               <Icon name='eye' style={{ fill: '#444' }} />
             </IconButton>
