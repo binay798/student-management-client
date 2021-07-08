@@ -4,33 +4,34 @@ import classes from './TableData.module.scss';
 import { IconButton, Avatar } from '@material-ui/core';
 import Icon from './../UI/Icon/Icon';
 import { imgUrl } from './../../containers/Admin/Admin';
-import { Link } from 'react-router-dom';
 
 function TableData(props) {
   return (
     <React.Fragment>
       <TableCell className={classes.table} align='left'>
-        {props.name}
+        {`${props.firstname} ${props.lastname}`}
       </TableCell>
       <TableCell className={classes.table} align='right'>
-        <Avatar alt='Cindy Baker' src={imgUrl} style={{ marginLeft: 'auto' }} />
+        <Avatar
+          alt='Cindy Baker'
+          src={props.profilePic || imgUrl}
+          style={{ marginLeft: 'auto' }}
+        />
       </TableCell>
       <TableCell className={classes.table} align='right'>
         {props.grade}
       </TableCell>
       <TableCell className={classes.table} align='right'>
-        {props.mobile}
+        {props.mobile || 'n/a'}
       </TableCell>
       <TableCell className={classes.table} align='right'>
-        {props.batch}
+        {new Date(props.batch).getFullYear() || 'n/a'}
       </TableCell>
       <TableCell className={classes.table} align='right'>
         <div>
-          <Link to={`/admin/${props.type}/dsaf`}>
-            <IconButton>
-              <Icon name='eye' style={{ fill: '#444' }} />
-            </IconButton>
-          </Link>
+          <IconButton onClick={() => props.selectUser(props)}>
+            <Icon name='eye' style={{ fill: '#444' }} />
+          </IconButton>
 
           <IconButton>
             <Icon name='edit' style={{ fill: '#3f51b5' }} />

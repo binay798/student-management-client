@@ -5,6 +5,9 @@ import { imgUrl } from './../../Admin';
 import Button from '@material-ui/core/Button';
 import Icon from './../../../../components/UI/Icon/Icon';
 
+const billImage =
+  'https://www.iconsoft.com.np/downloads/School-Bill-Management-Syst.jpg';
+
 function Student() {
   return (
     <Paper className={classes.student}>
@@ -57,6 +60,8 @@ function Student() {
           <Payments />
         </div>
       </div>
+
+      {/* Show create result or create Payment */}
     </Paper>
   );
 }
@@ -80,6 +85,54 @@ function Results() {
           Create
         </Button>
       </div>
+
+      {/* Results lists */}
+      <ul className={classes.results__list}>
+        <li>
+          <p>First term result</p>
+          <div>
+            <Button variant='contained' color='primary'>
+              View
+            </Button>
+            <Button variant='contained' color='secondary'>
+              Edit
+            </Button>
+          </div>
+        </li>
+        <li>
+          <p>Second term result</p>
+          <div>
+            <Button variant='contained' color='primary'>
+              View
+            </Button>
+            <Button variant='contained' color='secondary'>
+              Edit
+            </Button>
+          </div>
+        </li>
+        <li>
+          <p>Third term result</p>
+          <div>
+            <Button variant='contained' color='primary'>
+              View
+            </Button>
+            <Button variant='contained' color='secondary'>
+              Edit
+            </Button>
+          </div>
+        </li>
+        <li>
+          <p>Fourth term result</p>
+          <div>
+            <Button variant='contained' color='primary'>
+              View
+            </Button>
+            <Button variant='contained' color='secondary'>
+              Edit
+            </Button>
+          </div>
+        </li>
+      </ul>
     </div>
   );
 }
@@ -87,6 +140,7 @@ function Results() {
 function Payments() {
   return (
     <div className={classes.payments}>
+      {/* payments heading */}
       <div className={classes.payments__head}>
         <h2>Payments</h2>
         <Button
@@ -103,6 +157,28 @@ function Payments() {
           Create
         </Button>
       </div>
+
+      {/* Payments lists */}
+      <ul className={classes.payments__list}>
+        {Array(5)
+          .fill()
+          .map((item) => {
+            return (
+              <li>
+                <img src={billImage} alt='bill' />
+                <p>Admission fee</p>
+                <div>
+                  <Button variant='contained' color='primary'>
+                    View
+                  </Button>
+                  <Button variant='contained' color='secondary'>
+                    Edit
+                  </Button>
+                </div>
+              </li>
+            );
+          })}
+      </ul>
     </div>
   );
 }

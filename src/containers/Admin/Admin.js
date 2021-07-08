@@ -19,6 +19,7 @@ import Grade from './Grades/Grade/Grade';
 import CreateGrade from './Grades/CreateGrade/CreateGrade';
 import Student from './Grades/Student/Student';
 import { useHistory } from 'react-router';
+import Images from './Images/Images';
 
 export const imgUrl =
   'https://blogs-images.forbes.com/danschawbel/files/2017/12/Dan-Schawbel_avatar_1512422077-400x400.jpg';
@@ -52,6 +53,7 @@ function Admin() {
             <Route path='/admin/teachers' component={Teachers} />
             <Route path='/admin/createUser' component={CreateUser} />
             <Route path='/admin/user/:id' component={User} />
+            <Route path='/admin/images' component={Images} />
 
             <Route path='/' component={Dashboard} />
           </Switch>

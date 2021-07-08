@@ -60,6 +60,24 @@
     display: flex;
     gap: 3rem;
   }
+
+  &__list {
+    margin-top: 2rem;
+    li {
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      & > div {
+        display: flex;
+        gap: 1rem;
+      }
+    }
+    li:nth-child(odd) {
+      background-color: #eee;
+    }
+  }
 }
 
 .btn {
@@ -70,5 +88,32 @@
   &__head {
     display: flex;
     gap: 3rem;
+  }
+  &__list {
+    margin-top: 2rem;
+    li {
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 2rem;
+
+      p {
+        margin-right: auto;
+      }
+
+      img {
+        display: block;
+        height: 10rem;
+      }
+
+      & > div {
+        display: flex;
+        gap: 1rem;
+      }
+    }
+    li:nth-child(odd) {
+      background-color: #eee;
+    }
   }
 }

@@ -11,8 +11,9 @@ import TableHead from '@material-ui/core/TableHead';
 import { Button, FormControl, InputLabel, Select } from '@material-ui/core';
 import Icon from './../../../components/UI/Icon/Icon';
 import MenuItem from '@material-ui/core/MenuItem';
-import TableData from '../../../components/TableData/TableData';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import { Avatar, IconButton } from '@material-ui/core';
+import { imgUrl } from './../Admin';
 
 function Grades() {
   return (
@@ -80,6 +81,11 @@ const useStyles = makeStyles({
 
 function StickyHeadTable() {
   const classes = useStyles();
+  const history = useHistory();
+
+  const changeRoute = (id) => {
+    history.push('/admin/grades/' + id);
+  };
 
   return (
     <Paper className={classes.root}>
@@ -129,7 +135,36 @@ function StickyHeadTable() {
             {rows.map((row, id) => {
               return (
                 <TableRow key={id} hover role='checkbox' tabIndex={-1}>
-                  <TableData {...row} type='grades' />
+                  <TableCell style={{ fontSize: '1.6rem' }} align='left'>
+                    {row.name}
+                  </TableCell>
+                  <TableCell style={{ fontSize: '1.6rem' }} align='right'>
+                    <Avatar
+                      alt='Cindy Baker'
+                      src={imgUrl}
+                      style={{ marginLeft: 'auto' }}
+                    />
+                  </TableCell>
+                  <TableCell style={{ fontSize: '1.6rem' }} align='right'>
+                    {row.grade}
+                  </TableCell>
+                  <TableCell style={{ fontSize: '1.6rem' }} align='right'>
+                    {row.mobile || 'n/a'}
+                  </TableCell>
+                  <TableCell style={{ fontSize: '1.6rem' }} align='right'>
+                    {new Date(row.batch).getFullYear() || 'n/a'}
+                  </TableCell>
+                  <TableCell style={{ fontSize: '1.6rem' }} align='right'>
+                    <div>
+                      <IconButton onClick={() => changeRoute(row.name)}>
+                        <Icon name='eye' style={{ fill: '#444' }} />
+                      </IconButton>
+
+                      <IconButton>
+                        <Icon name='edit' style={{ fill: '#3f51b5' }} />
+                      </IconButton>
+                    </div>
+                  </TableCell>
                 </TableRow>
               );
             })}

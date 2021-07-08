@@ -29,6 +29,14 @@ function Sidebar() {
           <span>Students</span>
         </NavLink>
         <NavLink
+          to='/admin/images'
+          className={classes.sidebar__item}
+          activeClassName={classes.active}
+        >
+          <Icon name='image' />
+          <span>Images</span>
+        </NavLink>
+        <NavLink
           to='/admin/teachers'
           className={classes.sidebar__item}
           activeClassName={classes.active}

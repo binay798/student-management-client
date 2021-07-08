@@ -1,1 +1,2 @@
 export const GET_ALL_TEACHERS = 'GET_ALL_TEACHERS';
+export const UPDATE_TEACHER = 'UPDATE_TEACHER';

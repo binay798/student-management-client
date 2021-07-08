@@ -1,2 +1,4 @@
-import * as actionTypes from './../actions/index';
-console.log(actionTypes);
+export * from './teachers';
+export * from './students';
+export * from './users';
+export * from './images';

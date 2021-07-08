@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import classes from './Dashboard.module.scss';
 import { Paper } from '@material-ui/core';
 import Icon from '../../../components/UI/Icon/Icon';
@@ -10,8 +10,11 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
-
-function Dashboard() {
+import * as actionCreators from './../../../store/actionCreators/index';
+import { useSelector, useDispatch } from 'react-redux';
+import { makeStyles } from '@material-ui/core/styles';
+import { selectUser as SelectUser } from './../../../store/actionCreators/index';
+function Dashboard(props) {
   return (
     <div className={classes.dashboard}>
       <div className={classes.dashboard__top}>
@@ -39,14 +42,23 @@ function Dashboard() {
       </div>
       {/* bottom content */}
       <div className={classes.dashboard__bottom}>
-        <TopStudentsTable />
+        <TopStudentsTable {...props} />
       </div>
       <div className={classes.dashboard__bottom}>
-        <TeachersTable />
+        <TeachersTable {...props} />
       </div>
     </div>
   );
 }
+
+const useStyles = makeStyles({
+  root: {
+    width: '100%',
+  },
+  container: {
+    maxHeight: 440,
+  },
+});
 
 function createData(name, calories, fat, carbs) {
   return { name, calories, fat, carbs };
@@ -60,10 +72,11 @@ const rows = [
   createData('Mary', 356, 3, 8),
 ];
 const TopStudentsTable = () => {
+  const styles = useStyles();
   return (
     <div className={classes.topStudents}>
-      <TableContainer component={Paper}>
-        <Table aria-label='simple table'>
+      <TableContainer component={Paper} className={styles.container}>
+        <Table stickyHeader aria-label='sticky table'>
           <TableHead>
             <TableRow className={classes.topStudents__tableRow}>
               <TableCell>Top Students</TableCell>
@@ -118,66 +131,86 @@ const TopStudentsTable = () => {
   );
 };
 
-const teachersRow = [
-  createData('Mosh hamadini', 159, 10, 9854623457),
-  createData('Angelina stewart', 237, 9, 9847563214),
-  createData('Mark hamadini', 262, 2, 9843105746),
-  createData('John doe', 305, 5, 9863257415),
-  createData('Mary', 356, 3, 9874613528),
-];
+const TeachersTable = (props) => {
+  const globalState = useSelector((state) => state.teachers);
+  const dispatch = useDispatch();
+  const styles = useStyles();
+  // get all teachers
+  useEffect(() => {
+    // if teachers are present in the globalState then don't fetch data from server
+    if (globalState.teachers !== null) return 1;
+    // if the teachers are not present
+    (async () => {
+      try {
+        dispatch(actionCreators.getAllTeachers());
+      } catch (err) {
+        console.log(err);
+      }
+    })();
+  }, [dispatch, globalState.teachers]);
 
-const TeachersTable = () => {
+  // change route to user with selected user
+  const selectUser = (user) => {
+    dispatch(SelectUser(user));
+    props.history.push(`/admin/user/${user._id}`);
+  };
+
+  // return all the teachers
   return (
     <div className={classes.topStudents}>
-      <TableContainer component={Paper}>
-        <Table aria-label='simple table'>
+      <TableContainer component={Paper} className={styles.container}>
+        <Table stickyHeader aria-label='sticky table'>
           <TableHead>
             <TableRow className={classes.topStudents__tableRow}>
               <TableCell>Teachers</TableCell>
               <TableCell align='right'>Photo</TableCell>
-              <TableCell align='right'>Class teacher</TableCell>
               <TableCell align='right'>Mobile no.</TableCell>
               <TableCell align='right'>Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {teachersRow.map((row) => (
-              <TableRow
-                key={row.name}
-                className={classes.topStudents__tableCell}
-              >
-                <TableCell component='th' scope='row'>
-                  {row.name}
-                </TableCell>
-                <TableCell align='right'>
-                  <Avatar
-                    style={{ marginLeft: 'auto' }}
-                    src='https://blogs-images.forbes.com/danschawbel/files/2017/12/Dan-Schawbel_avatar_1512422077-400x400.jpg'
-                  />
-                </TableCell>
-                <TableCell align='right'>{row.fat}</TableCell>
-                <TableCell align='right'>{row.carbs}</TableCell>
-                <TableCell align='right'>
-                  <Button
-                    variant='contained'
-                    color='primary'
-                    startIcon={
-                      <Icon
-                        name='eye'
-                        style={{
-                          fill: 'white',
-                          width: '1.5rem',
-                          height: '1.5rem',
-                        }}
-                      />
-                    }
-                    style={{ fontSize: '1.2rem', textTransform: 'none' }}
+            {globalState.teachers &&
+              globalState.teachers.map((row) => (
+                <TableRow
+                  key={row._id}
+                  className={classes.topStudents__tableCell}
+                >
+                  <TableCell
+                    component='th'
+                    scope='row'
+                    style={{ textTransform: 'capitalize' }}
                   >
-                    View
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
+                    {`${row.firstname} ${row.lastname}`}
+                  </TableCell>
+                  <TableCell align='right'>
+                    <Avatar
+                      style={{ marginLeft: 'auto' }}
+                      src='https://blogs-images.forbes.com/danschawbel/files/2017/12/Dan-Schawbel_avatar_1512422077-400x400.jpg'
+                    />
+                  </TableCell>
+                  <TableCell align='right'>{row.mobile}</TableCell>
+                  <TableCell align='right'>
+                    <Button
+                      variant='contained'
+                      color='primary'
+                      onClick={() => selectUser(row)}
+                      startIcon={
+                        <Icon
+                          name='eye'
+                          style={{
+                            fill: 'white',
+                            width: '1.5rem',
+                            height: '1.5rem',
+                          }}
+                        />
+                      }
+                      style={{ fontSize: '1.2rem', textTransform: 'none' }}
+                    >
+                      View
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </TableContainer>

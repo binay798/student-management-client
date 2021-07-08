@@ -1,0 +1,4 @@
+export const CREATE_IMAGE = 'CREATE_IMAGE';
+export const GET_IMAGES = 'GET_IMAGES';
+export const UPDATE_IMAGES_LIST = 'UPDATE_IMAGES_LIST';
+export const DELETE_IMAGE = 'DELETE_IMAGE';

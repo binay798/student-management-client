@@ -1,0 +1,124 @@
+.images {
+  padding: 1rem;
+  min-height: 83vh;
+  color: #666 !important;
+
+  // display all images
+  &__main {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+  }
+
+  &__container {
+    display: flex;
+    gap: 3rem;
+    height: 100%;
+    align-items: flex-start;
+    &__left {
+      flex: 3;
+      padding: 1rem;
+      min-height: 83vh;
+    }
+
+    &__right {
+      flex: 1;
+      padding: 1rem;
+    }
+  }
+
+  &__search {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+  }
+
+  &__form {
+    margin-top: 2rem;
+    // display: flex;
+    gap: 4rem;
+    align-items: flex-start;
+
+    &__img {
+      margin-bottom: 2rem;
+      display: flex;
+      gap: 2rem;
+      flex-direction: column;
+    }
+
+    &__inp {
+      width: 100% !important;
+      & > * {
+        font-size: 1.4rem !important;
+      }
+    }
+  }
+
+  &__preview {
+    display: block;
+    height: 20rem;
+    width: 100%;
+    object-fit: contain;
+    margin: 0 auto;
+    margin-bottom: 2rem !important;
+  }
+}
+
+#file {
+  display: none;
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid lightgray;
+  padding: 1rem 2rem;
+  cursor: pointer;
+  transition: 0.2s;
+  &:hover {
+    background-color: lightgray;
+  }
+}
+
+.btn {
+  font-size: 1.4rem !important;
+  text-transform: none !important;
+  width: 100% !important;
+}
+
+.img {
+  position: relative;
+  img {
+    display: block;
+    width: 100%;
+    object-fit: cover;
+    height: 100%;
+  }
+
+  &:hover &__overlay {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  &__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: none;
+    color: white;
+    text-align: center;
+
+    button {
+      width: 15rem !important;
+      margin: 0 auto !important;
+      color: white !important;
+      margin-bottom: 1rem !important;
+    }
+  }
+}

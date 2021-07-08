@@ -28,12 +28,16 @@ function Login() {
           label='Email'
           type='email'
           variant='outlined'
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
         <TextField
           className={classes.login__form__inp}
           label='Password'
           type='password'
           variant='outlined'
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
         />
         <Button
           variant='contained'
