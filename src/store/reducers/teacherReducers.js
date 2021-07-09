@@ -1,4 +1,8 @@
-import { UPDATE_TEACHER } from './../actions/index';
+import {
+  UPDATE_TEACHER,
+  ADD_TEACHER,
+  GET_ALL_TEACHERS,
+} from './../actions/index';
 import produce from 'immer';
 
 const initialState = {
@@ -7,7 +11,7 @@ const initialState = {
 
 const reducers = (state = initialState, action) => {
   switch (action.type) {
-    case 'GET_ALL_TEACHERS':
+    case GET_ALL_TEACHERS:
       return {
         ...state,
         teachers: [...action.payload],
@@ -23,6 +27,14 @@ const reducers = (state = initialState, action) => {
       return {
         ...state,
         teachers: [...newTeacherArr],
+      };
+    case ADD_TEACHER:
+      let newArrAfterAdd = produce(state.teachers, (draft) => {
+        draft.unshift({ ...action.payload });
+      });
+      return {
+        ...state,
+        teachers: newArrAfterAdd,
       };
     default:
       return state;

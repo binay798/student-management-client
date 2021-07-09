@@ -14,6 +14,7 @@ import * as actionCreators from './../../../store/actionCreators/index';
 import { useSelector, useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { selectUser as SelectUser } from './../../../store/actionCreators/index';
+
 function Dashboard(props) {
   return (
     <div className={classes.dashboard}>
@@ -60,19 +61,29 @@ const useStyles = makeStyles({
   },
 });
 
-function createData(name, calories, fat, carbs) {
-  return { name, calories, fat, carbs };
-}
-
-const rows = [
-  createData('Mosh hamadini', 159, 10, 24),
-  createData('Angelina stewart', 237, 9, 37),
-  createData('Mark hamadini', 262, 2, 24),
-  createData('John doe', 305, 5, 1),
-  createData('Mary', 356, 3, 8),
-];
-const TopStudentsTable = () => {
+const TopStudentsTable = (props) => {
   const styles = useStyles();
+  const globalState = useSelector((state) => state.students);
+  const dispatch = useDispatch();
+  // get all teachers
+  useEffect(() => {
+    // if students are present in the globalState then don't fetch data from server
+    if (globalState.students !== null) return 1;
+    // if the students are not present
+    (async () => {
+      try {
+        dispatch(actionCreators.getStudents());
+      } catch (err) {
+        console.log(err);
+      }
+    })();
+  }, [dispatch, globalState.students]);
+
+  // change route to user with selected user
+  const selectUser = (user) => {
+    dispatch(SelectUser(user));
+    props.history.push(`/admin/user/${user._id}`);
+  };
   return (
     <div className={classes.topStudents}>
       <TableContainer component={Paper} className={styles.container}>
@@ -87,43 +98,44 @@ const TopStudentsTable = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
-              <TableRow
-                key={row.name}
-                className={classes.topStudents__tableCell}
-              >
-                <TableCell component='th' scope='row'>
-                  {row.name}
-                </TableCell>
-                <TableCell align='right'>
-                  <Avatar
-                    style={{ marginLeft: 'auto' }}
-                    src='https://blogs-images.forbes.com/danschawbel/files/2017/12/Dan-Schawbel_avatar_1512422077-400x400.jpg'
-                  />
-                </TableCell>
-                <TableCell align='right'>{row.fat}</TableCell>
-                <TableCell align='right'>{row.carbs}</TableCell>
-                <TableCell align='right'>
-                  <Button
-                    variant='contained'
-                    color='primary'
-                    startIcon={
-                      <Icon
-                        name='eye'
-                        style={{
-                          fill: 'white',
-                          width: '1.5rem',
-                          height: '1.5rem',
-                        }}
-                      />
-                    }
-                    style={{ fontSize: '1.2rem', textTransform: 'none' }}
-                  >
-                    View
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
+            {globalState.students &&
+              globalState.students.map((row) => (
+                <TableRow
+                  key={row._id}
+                  className={classes.topStudents__tableCell}
+                >
+                  <TableCell component='th' scope='row'>
+                    {row.firstname} {row.lastname}
+                  </TableCell>
+                  <TableCell align='right'>
+                    <Avatar style={{ marginLeft: 'auto' }} src={row.profilePic}>
+                      {row.firstname}
+                    </Avatar>
+                  </TableCell>
+                  <TableCell align='right'>{row.grade}</TableCell>
+                  <TableCell align='right'>{row.mobile}</TableCell>
+                  <TableCell align='right'>
+                    <Button
+                      variant='contained'
+                      color='primary'
+                      onClick={() => selectUser(row)}
+                      startIcon={
+                        <Icon
+                          name='eye'
+                          style={{
+                            fill: 'white',
+                            width: '1.5rem',
+                            height: '1.5rem',
+                          }}
+                        />
+                      }
+                      style={{ fontSize: '1.2rem', textTransform: 'none' }}
+                    >
+                      View
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
           </TableBody>
         </Table>
       </TableContainer>
@@ -183,10 +195,9 @@ const TeachersTable = (props) => {
                     {`${row.firstname} ${row.lastname}`}
                   </TableCell>
                   <TableCell align='right'>
-                    <Avatar
-                      style={{ marginLeft: 'auto' }}
-                      src='https://blogs-images.forbes.com/danschawbel/files/2017/12/Dan-Schawbel_avatar_1512422077-400x400.jpg'
-                    />
+                    <Avatar style={{ marginLeft: 'auto' }} src={row.profilePic}>
+                      {row.firstname}
+                    </Avatar>
                   </TableCell>
                   <TableCell align='right'>{row.mobile}</TableCell>
                   <TableCell align='right'>

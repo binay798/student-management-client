@@ -1,4 +1,4 @@
-import { GET_STUDENTS, UPDATE_STUDENT } from './../actions/index';
+import { GET_STUDENTS, UPDATE_STUDENT, ADD_STUDENT } from './../actions/index';
 import produce from 'immer';
 
 const initialState = {
@@ -23,6 +23,14 @@ const reducers = (state = initialState, action) => {
       return {
         ...state,
         students: [...newStudentArr],
+      };
+    case ADD_STUDENT:
+      let newArrAfterAdd = produce(state.students, (draft) => {
+        draft.unshift({ ...action.payload });
+      });
+      return {
+        ...state,
+        students: newArrAfterAdd,
       };
     default:
       return state;

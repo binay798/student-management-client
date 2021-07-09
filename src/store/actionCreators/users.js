@@ -24,3 +24,20 @@ export const updateUser = (data, id) => {
     }
   };
 };
+
+export const createUser = (data, setLoading) => {
+  return async (dispatch) => {
+    setLoading(true);
+    try {
+      let res = await axios.post('/api/v1/users/signup', data);
+      if (res.data.user.role === 'student') {
+        dispatch({ type: actionTypes.ADD_STUDENT, payload: res.data.user });
+      } else if (res.data.user.role === 'teacher') {
+        dispatch({ type: actionTypes.ADD_TEACHER, payload: res.data.user });
+      }
+    } catch (err) {
+      console.log(err.message);
+    }
+    setLoading(false);
+  };
+};
