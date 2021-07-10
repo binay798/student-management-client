@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import classes from './Images.module.scss';
 import Paper from '@material-ui/core/Paper';
 import Icon from './../../../components/UI/Icon/Icon';
-import { TextField, Button } from '@material-ui/core';
+import { TextField, Button, CircularProgress } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   createImage,
@@ -10,6 +10,19 @@ import {
   deleteImage,
 } from './../../../store/actionCreators/index';
 
+function Progress(props) {
+  const progressStyle = {
+    display: props.loading ? 'flex' : 'none',
+    padding: '4rem',
+    justifyContent: 'center',
+    alignItems: 'center',
+  };
+  return (
+    <div style={progressStyle}>
+      <CircularProgress />
+    </div>
+  );
+}
 function Images() {
   const globalState = useSelector((state) => state.image);
   const dispatch = useDispatch();
@@ -19,9 +32,10 @@ function Images() {
   const [copied, setCopied] = useState('');
   const [deleteImageLoading, setDeleteImageLoading] = useState(false);
   const [imageUploadLoading, setImageUploadLoading] = useState(false);
+  const [initialLoading, setInitialLoading] = useState(false);
 
   useEffect(() => {
-    dispatch(getImages());
+    dispatch(getImages(setInitialLoading));
   }, []);
 
   const changeHandler = (e) => {
@@ -89,6 +103,8 @@ function Images() {
             </Button>
           </div>
 
+          {/* loading */}
+          <Progress loading={initialLoading} />
           {/* images container */}
 
           <div className={classes.images__main}>

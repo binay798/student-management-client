@@ -27,14 +27,16 @@ export const createImage = (file, name, setStateArr, setLoading) => {
   };
 };
 
-export const getImages = () => {
+export const getImages = (setLoading) => {
   return async (dispatch) => {
+    setLoading(true);
     try {
       let res = await axios.get('/api/v1/images');
       dispatch({ type: actionTypes.GET_IMAGES, payload: res.data.images });
     } catch (err) {
       console.log(err.message);
     }
+    setLoading(false);
   };
 };
 

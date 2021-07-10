@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import classes from './Teachers.module.scss';
 import { Paper, Avatar, IconButton } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -9,7 +9,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 import TableHead from '@material-ui/core/TableHead';
 import TextField from '@material-ui/core/TextField';
-import { Button } from '@material-ui/core';
+import { Button, CircularProgress } from '@material-ui/core';
 import Icon from './../../../components/UI/Icon/Icon';
 import { useHistory } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux';
@@ -20,6 +20,19 @@ import {
   selectUser as SelectUser,
 } from './../../../store/actionCreators/index';
 
+function Progress(props) {
+  const progressStyle = {
+    display: props.loading ? 'flex' : 'none',
+    padding: '4rem',
+    justifyContent: 'center',
+    alignItems: 'center',
+  };
+  return (
+    <div style={progressStyle}>
+      <CircularProgress />
+    </div>
+  );
+}
 function Teachers() {
   return (
     <Paper className={classes.teachers}>
@@ -60,6 +73,7 @@ const useStyles = makeStyles({
 });
 
 function StickyHeadTable() {
+  const [loading, setLoading] = useState(false);
   const globalState = useSelector((state) => state.teachers);
   const dispatch = useDispatch();
   const classes = useStyles();
@@ -68,7 +82,7 @@ function StickyHeadTable() {
 
   useEffect(() => {
     if (globalState.teachers) return 1;
-    dispatch(getAllTeachers());
+    dispatch(getAllTeachers(setLoading));
   }, [dispatch, globalState]);
   // change route to user with selected user
   const selectUser = (user) => {
@@ -120,6 +134,8 @@ function StickyHeadTable() {
               </TableCell>
             </TableRow>
           </TableHead>
+          {/* loading */}
+          <Progress loading={loading} />
           <TableBody>
             {globalState.teachers &&
               globalState.teachers.map((row, id) => {

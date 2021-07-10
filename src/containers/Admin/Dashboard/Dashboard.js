@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import classes from './Dashboard.module.scss';
 import { Paper } from '@material-ui/core';
 import Icon from '../../../components/UI/Icon/Icon';
@@ -14,7 +14,21 @@ import * as actionCreators from './../../../store/actionCreators/index';
 import { useSelector, useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { selectUser as SelectUser } from './../../../store/actionCreators/index';
+import { CircularProgress } from '@material-ui/core';
 
+function Progress(props) {
+  const progressStyle = {
+    display: props.loading ? 'flex' : 'none',
+    padding: '4rem',
+    justifyContent: 'center',
+    alignItems: 'center',
+  };
+  return (
+    <div style={progressStyle}>
+      <CircularProgress />
+    </div>
+  );
+}
 function Dashboard(props) {
   return (
     <div className={classes.dashboard}>
@@ -65,18 +79,13 @@ const TopStudentsTable = (props) => {
   const styles = useStyles();
   const globalState = useSelector((state) => state.students);
   const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false);
   // get all teachers
   useEffect(() => {
     // if students are present in the globalState then don't fetch data from server
     if (globalState.students !== null) return 1;
     // if the students are not present
-    (async () => {
-      try {
-        dispatch(actionCreators.getStudents());
-      } catch (err) {
-        console.log(err);
-      }
-    })();
+    dispatch(actionCreators.getStudents(setLoading));
   }, [dispatch, globalState.students]);
 
   // change route to user with selected user
@@ -97,6 +106,8 @@ const TopStudentsTable = (props) => {
               <TableCell align='right'>Action</TableCell>
             </TableRow>
           </TableHead>
+          {/* loading */}
+          <Progress loading={loading} />
           <TableBody>
             {globalState.students &&
               globalState.students.map((row) => (
@@ -147,18 +158,13 @@ const TeachersTable = (props) => {
   const globalState = useSelector((state) => state.teachers);
   const dispatch = useDispatch();
   const styles = useStyles();
+  const [loading, setLoading] = useState(false);
   // get all teachers
   useEffect(() => {
     // if teachers are present in the globalState then don't fetch data from server
     if (globalState.teachers !== null) return 1;
     // if the teachers are not present
-    (async () => {
-      try {
-        dispatch(actionCreators.getAllTeachers());
-      } catch (err) {
-        console.log(err);
-      }
-    })();
+    dispatch(actionCreators.getAllTeachers(setLoading));
   }, [dispatch, globalState.teachers]);
 
   // change route to user with selected user
@@ -180,6 +186,8 @@ const TeachersTable = (props) => {
               <TableCell align='right'>Action</TableCell>
             </TableRow>
           </TableHead>
+          {/* loading */}
+          <Progress loading={loading} />
           <TableBody>
             {globalState.teachers &&
               globalState.teachers.map((row) => (

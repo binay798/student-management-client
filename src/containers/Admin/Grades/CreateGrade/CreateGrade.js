@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import classes from './CreateGrade.module.scss';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
@@ -9,9 +9,28 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import axios from './../../../../axios-instance/axiosInstance';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 function CreateGrade() {
-  const [teacher, setTeacher] = React.useState('John');
+  const [teacher, setTeacher] = React.useState('');
+  const [studentList, setStudentList] = useState([]);
+  const [teacherList, setTeacherList] = useState([]);
+  const [subject, setSubject] = useState('');
+  const [subjectList, setSubjectList] = useState([]);
+
+  const addSubjects = () => {
+    if (!subject && !teacher) return;
+    let data = {
+      name: subject,
+      teacher: teacher,
+    };
+    setSubjectList([data, ...subjectList]);
+    setTeacher('');
+    setSubject('');
+  };
+  console.log(subjectList);
+
   return (
     <Paper className={classes.grade}>
       <h2 className={classes.grade__head}>Create a new grade</h2>
@@ -40,78 +59,30 @@ function CreateGrade() {
         {/* Add students and teachers */}
         <div className={classes.grade__form__add}>
           <div className={classes.grade__form__add__left}>
-            <div className={classes.grade__form__add__search}>
-              <TextField
-                variant='outlined'
-                label='search students'
-                className={classes.grade__form__inp}
-                style={{ maxWidth: '25rem' }}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position='start'>
-                      <Icon name='search' />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </div>
-            <ul>
-              {Array(5)
-                .fill()
-                .map((item) => {
-                  return (
-                    <li>
-                      <Avatar src={imgUrl} />
-                      <p>John Doe</p>
-                      <IconButton style={{ marginLeft: 'auto' }}>
-                        <Icon name='trash' style={{ fill: 'coral' }} />
-                      </IconButton>
-                    </li>
-                  );
-                })}
-            </ul>
+            {/* Students */}
+            <Students
+              studentList={studentList}
+              setStudentList={setStudentList}
+            />
           </div>
           <div className={classes.grade__form__add__right}>
-            <div className={classes.grade__form__add__search}>
-              <TextField
-                variant='outlined'
-                label='search teachers'
-                className={classes.grade__form__inp}
-                style={{ maxWidth: '25rem' }}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position='start'>
-                      <Icon name='search' />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-            </div>
-            <ul>
-              {Array(5)
-                .fill()
-                .map((item) => {
-                  return (
-                    <li>
-                      <Avatar src={imgUrl} />
-                      <p>John Doe</p>
-                      <IconButton style={{ marginLeft: 'auto' }}>
-                        <Icon name='trash' style={{ fill: 'coral' }} />
-                      </IconButton>
-                    </li>
-                  );
-                })}
-            </ul>
+            <Teachers
+              teacherList={teacherList}
+              setTeacherList={setTeacherList}
+            />
           </div>
         </div>
 
         {/* Add subjects */}
         <div className={classes.grade__form__subjects}>
-          <div>
+          <h1>Add Subjects</h1>
+          <div style={{ marginBottom: '4rem' }}>
             <TextField
               variant='outlined'
               className={classes.grade__form__inp}
               label='Add subjects'
+              value={subject}
+              onChange={(e) => setSubject(e.target.value)}
             />
             <FormControl
               variant='outlined'
@@ -130,13 +101,15 @@ function CreateGrade() {
                 <MenuItem value=''>
                   <em>None</em>
                 </MenuItem>
-                <MenuItem value={'John'}>John</MenuItem>
-                <MenuItem value={'Mosh'}>Mosh</MenuItem>
-                <MenuItem value={'Stephane'}>Stephane</MenuItem>
+
+                {teacherList.map((item) => {
+                  return <MenuItem value={item}>{item.firstname}</MenuItem>;
+                })}
               </Select>
             </FormControl>
             <Button
               variant='contained'
+              onClick={addSubjects}
               startIcon={
                 <Icon
                   name='plus'
@@ -148,21 +121,25 @@ function CreateGrade() {
               Add
             </Button>
           </div>
-
+          {/* Subject lists */}
           <ul className={classes.grade__form__subjects__items}>
-            {Array(5)
-              .fill()
-              .map((item) => {
-                return (
-                  <li>
-                    <p>Math</p>
-                    <p>John doe</p>
-                    <IconButton style={{ marginLeft: 'auto' }}>
-                      <Icon name='trash' style={{ fill: 'coral' }} />
-                    </IconButton>
-                  </li>
-                );
-              })}
+            {subjectList.map((item) => {
+              return (
+                <li>
+                  <Avatar src={item.teacher.profilePic} />
+                  <p>
+                    {item.teacher.firstname} {item.teacher.lastname}
+                  </p>
+                  <p>
+                    <strong>({item.name})</strong>
+                  </p>
+
+                  <IconButton style={{ marginLeft: 'auto' }}>
+                    <Icon name='trash' style={{ fill: 'coral' }} />
+                  </IconButton>
+                </li>
+              );
+            })}
           </ul>
         </div>
 
@@ -175,6 +152,219 @@ function CreateGrade() {
         </Button>
       </div>
     </Paper>
+  );
+}
+
+function Students(props) {
+  const [searchedList, setSearchedList] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [name, setName] = useState('');
+  const [userNotFound, setUserNotFound] = useState(false);
+
+  const searchedListStyle = {
+    display: searchedList.length === 0 && !userNotFound ? 'none' : 'flex',
+  };
+  const closeMenu = () => {
+    setSearchedList([]);
+    setUserNotFound(false);
+  };
+  const searchStudents = async (e) => {
+    try {
+      if (e.key !== 'Enter') return;
+      setLoading(true);
+      let res = await axios.get('/api/v1/users/searchUser/student/' + name);
+      setSearchedList(res.data.users);
+      if (res.data.users.length === 0) {
+        setUserNotFound(true);
+      }
+    } catch (err) {
+      console.log(err.message);
+    }
+    setLoading(false);
+  };
+
+  const selectStudent = (data) => {
+    let index = props.studentList.findIndex((item) => item._id === data._id);
+    if (index !== -1) {
+      setSearchedList([]);
+      setName('');
+      return;
+    }
+    props.setStudentList([data, ...props.studentList]);
+    setSearchedList([]);
+    setName('');
+  };
+
+  const removeStudent = (data) => {
+    props.setStudentList([
+      ...props.studentList.filter((item) => item._id !== data._id),
+    ]);
+  };
+  return (
+    <React.Fragment>
+      <div className={classes.grade__form__add__search}>
+        <TextField
+          variant='outlined'
+          label='search students'
+          className={classes.grade__form__inp}
+          style={{ maxWidth: '25rem' }}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          onKeyPress={searchStudents}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position='start'>
+                <Icon name='search' />
+              </InputAdornment>
+            ),
+          }}
+        />
+        <CircularProgress style={{ display: loading ? 'block' : 'none' }} />
+
+        {/* Searched students list */}
+        <div className={classes.searchedList} style={searchedListStyle}>
+          <p onClick={closeMenu}>close</p>
+          {userNotFound ? (
+            <h4 style={{ margin: '0 1rem' }}>Student not found</h4>
+          ) : null}
+          {searchedList.map((item) => {
+            return (
+              <div key={item._id} onClick={() => selectStudent(item)}>
+                <Avatar src={item.profilePic}>Mark</Avatar>
+                <p>
+                  {item.firstname} {item.lastname}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+      <ul>
+        {props.studentList.map((item) => {
+          return (
+            <li key={item._id}>
+              <Avatar src={item.profilePic} />
+              <p>
+                {item.firstname} {item.lastname}
+              </p>
+              <IconButton
+                onClick={() => removeStudent(item)}
+                style={{ marginLeft: 'auto' }}
+              >
+                <Icon name='trash' style={{ fill: 'coral' }} />
+              </IconButton>
+            </li>
+          );
+        })}
+      </ul>
+    </React.Fragment>
+  );
+}
+
+function Teachers(props) {
+  const [searchedList, setSearchedList] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [name, setName] = useState('');
+  const [userNotFound, setUserNotFound] = useState(false);
+
+  const searchedListStyle = {
+    display: searchedList.length === 0 && !userNotFound ? 'none' : 'flex',
+  };
+
+  const closeMenu = () => {
+    setSearchedList([]);
+    setUserNotFound(false);
+  };
+  const searchTeacher = async (e) => {
+    try {
+      if (e.key !== 'Enter') return;
+      setLoading(true);
+      let res = await axios.get('/api/v1/users/searchUser/teacher/' + name);
+      setSearchedList(res.data.users);
+      if (res.data.users.length === 0) {
+        setUserNotFound(true);
+      }
+    } catch (err) {
+      console.log(err.message);
+    }
+    setLoading(false);
+  };
+
+  const selectTeacher = (data) => {
+    let index = props.teacherList.findIndex((item) => item._id === data._id);
+    if (index !== -1) {
+      setSearchedList([]);
+      setName('');
+      return;
+    }
+    props.setTeacherList([data, ...props.teacherList]);
+    setSearchedList([]);
+    setName('');
+  };
+
+  const removeTeacher = (data) => {
+    props.setTeacherList([
+      ...props.teacherList.filter((item) => item._id !== data._id),
+    ]);
+  };
+  return (
+    <React.Fragment>
+      <div className={classes.grade__form__add__search}>
+        <TextField
+          variant='outlined'
+          label='search teachers'
+          className={classes.grade__form__inp}
+          style={{ maxWidth: '25rem' }}
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          onKeyPress={searchTeacher}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position='start'>
+                <Icon name='search' />
+              </InputAdornment>
+            ),
+          }}
+        />
+        <CircularProgress style={{ display: loading ? 'block' : 'none' }} />
+
+        {/* Searched students list */}
+        <div className={classes.searchedList} style={searchedListStyle}>
+          <p onClick={closeMenu}>close</p>
+          {userNotFound ? (
+            <h4 style={{ margin: '0 1rem' }}>Teacher not found</h4>
+          ) : null}
+          {searchedList.map((item) => {
+            return (
+              <div key={item._id} onClick={() => selectTeacher(item)}>
+                <Avatar src={item.profilePic}>Mark</Avatar>
+                <p>
+                  {item.firstname} {item.lastname}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+      <ul>
+        {props.teacherList.map((item) => {
+          return (
+            <li key={item._id}>
+              <Avatar src={item.profilePic} />
+              <p>
+                {item.firstname} {item.lastname}
+              </p>
+              <IconButton
+                onClick={() => removeTeacher(item)}
+                style={{ marginLeft: 'auto' }}
+              >
+                <Icon name='trash' style={{ fill: 'coral' }} />
+              </IconButton>
+            </li>
+          );
+        })}
+      </ul>
+    </React.Fragment>
   );
 }
 

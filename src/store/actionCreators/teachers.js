@@ -1,7 +1,8 @@
 import axios from './../../axios-instance/axiosInstance';
 import * as actions from './../actions/index';
-export const getAllTeachers = () => {
+export const getAllTeachers = (setLoading) => {
   return async (dispatch) => {
+    setLoading(true);
     try {
       let teachers = await axios.get('/api/v1/users?limit=100&role=teacher');
       dispatch({
@@ -11,5 +12,6 @@ export const getAllTeachers = () => {
     } catch (err) {
       console.log(err.message);
     }
+    setLoading(false);
   };
 };

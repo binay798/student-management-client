@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import classes from './Students.module.scss';
-import { Paper } from '@material-ui/core';
+import { Paper, CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -28,6 +28,20 @@ const useStyles = makeStyles({
     maxHeight: 440,
   },
 });
+
+function Progress(props) {
+  const progressStyle = {
+    display: props.loading ? 'flex' : 'none',
+    padding: '4rem',
+    justifyContent: 'center',
+    alignItems: 'center',
+  };
+  return (
+    <div style={progressStyle}>
+      <CircularProgress />
+    </div>
+  );
+}
 
 function Students() {
   return (
@@ -77,6 +91,7 @@ function Students() {
 }
 
 function StickyHeadTable() {
+  const [loading, setLoading] = useState(false);
   const globalState = useSelector((state) => state.students);
   const dispatch = useDispatch();
   const classes = useStyles();
@@ -85,7 +100,7 @@ function StickyHeadTable() {
 
   useEffect(() => {
     if (globalState.students) return 1;
-    dispatch(getStudents());
+    dispatch(getStudents(setLoading));
   }, [dispatch, globalState]);
 
   // change route to user with selected user
@@ -138,6 +153,8 @@ function StickyHeadTable() {
               </TableCell>
             </TableRow>
           </TableHead>
+          {/* loading */}
+          <Progress loading={loading} />
           <TableBody>
             {globalState.students &&
               globalState.students.map((row, id) => {

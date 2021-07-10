@@ -21,9 +21,9 @@
 
     &__subjects {
       margin-top: 2rem;
-      display: flex;
-      align-items: flex-start;
-      gap: 6rem;
+      // display: flex;
+      // align-items: flex-start;
+      // gap: 6rem;
       margin-bottom: 2rem;
 
       & > div {
@@ -70,6 +70,7 @@
         gap: 2rem;
         align-items: center;
         margin-bottom: 2rem;
+        position: relative;
       }
       &__left,
       &__right {
@@ -94,6 +95,39 @@
         // background-color: coral;
         flex: 1;
       }
+    }
+  }
+}
+
+.searchedList {
+  background-color: rgb(255, 255, 255);
+  position: absolute;
+  z-index: 10;
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.349);
+  top: 110%;
+  left: 0;
+  width: 100%;
+  padding: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  border-radius: 4px;
+
+  & > p {
+    margin-left: auto;
+    color: coral;
+    cursor: pointer;
+    margin-right: 1rem;
+  }
+
+  & > div {
+    cursor: pointer;
+    padding: 0.5rem;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+
+    &:hover {
+      background-color: rgba(211, 211, 211, 0.685);
     }
   }
 }
