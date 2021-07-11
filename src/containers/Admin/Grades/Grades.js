@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import classes from './Grades.module.scss';
 import { Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -14,6 +14,11 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { Link, useHistory } from 'react-router-dom';
 import { Avatar, IconButton } from '@material-ui/core';
 import { imgUrl } from './../Admin';
+import {
+  getAllGrades,
+  selectGrade,
+} from './../../../store/actionCreators/index';
+import { useDispatch, useSelector } from 'react-redux';
 
 function Grades() {
   return (
@@ -48,28 +53,6 @@ function Grades() {
   );
 }
 
-function createData(name, photo, grade, mobile, batch) {
-  return { name, photo, grade, mobile, batch };
-}
-
-const rows = [
-  createData('John Doe', 'IN', 1, 3287263, 2012),
-  createData('Christine', 'CN', 2, 9596961, 2021),
-  createData('Junie', 'IT', 3, 301340, 2019),
-  createData('Mark', 'US', 4, 9833520, 2018),
-  createData('Mosh', 'CA', 5, 9984670, 2015),
-  createData('Mandy Lim', 'AU', 6, 7692024, 2016),
-  createData('Telusko', 'DE', 7, 357578, 2020),
-  createData('Jennifer', 'IE', 8, 70273, 2018),
-  createData('Prince', 'MX', 9, 1972550, 2014),
-  createData('Bob', 'JP', 10, 377973, 2016),
-  createData('Jeremy', 'FR', 5, 640679, 2017),
-  createData('Qazi', 'GB', 2, 242495, 2021),
-  createData('Josh', 'RU', 3, 17098246, 2021),
-  createData('Jonas', 'NG', 8, 923768, 2016),
-  createData('Brazil', 'BR', 6, 8515767, 2013),
-];
-
 const useStyles = makeStyles({
   root: {
     width: '100%',
@@ -82,9 +65,17 @@ const useStyles = makeStyles({
 function StickyHeadTable() {
   const classes = useStyles();
   const history = useHistory();
+  const dispatch = useDispatch();
+  const globalState = useSelector((state) => state.grade);
 
-  const changeRoute = (id) => {
-    history.push('/admin/grades/' + id);
+  useEffect(() => {
+    dispatch(getAllGrades());
+  }, []);
+
+  // select grade and change route
+  const changeRoute = (data) => {
+    dispatch(selectGrade(data));
+    history.push('/admin/grades/' + data._id);
   };
 
   return (
@@ -132,42 +123,43 @@ function StickyHeadTable() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row, id) => {
-              return (
-                <TableRow key={id} hover role='checkbox' tabIndex={-1}>
-                  <TableCell style={{ fontSize: '1.6rem' }} align='left'>
-                    {row.name}
-                  </TableCell>
-                  <TableCell style={{ fontSize: '1.6rem' }} align='right'>
-                    <Avatar
-                      alt='Cindy Baker'
-                      src={imgUrl}
-                      style={{ marginLeft: 'auto' }}
-                    />
-                  </TableCell>
-                  <TableCell style={{ fontSize: '1.6rem' }} align='right'>
-                    {row.grade}
-                  </TableCell>
-                  <TableCell style={{ fontSize: '1.6rem' }} align='right'>
-                    {row.mobile || 'n/a'}
-                  </TableCell>
-                  <TableCell style={{ fontSize: '1.6rem' }} align='right'>
-                    {new Date(row.batch).getFullYear() || 'n/a'}
-                  </TableCell>
-                  <TableCell style={{ fontSize: '1.6rem' }} align='right'>
-                    <div>
-                      <IconButton onClick={() => changeRoute(row.name)}>
-                        <Icon name='eye' style={{ fill: '#444' }} />
-                      </IconButton>
+            {globalState.allGrades &&
+              globalState.allGrades.map((row, id) => {
+                return (
+                  <TableRow key={id} hover role='checkbox' tabIndex={-1}>
+                    <TableCell style={{ fontSize: '1.6rem' }} align='left'>
+                      {row.classTeacher.firstname} {row.classTeacher.lastname}
+                    </TableCell>
+                    <TableCell style={{ fontSize: '1.6rem' }} align='right'>
+                      <Avatar
+                        alt='Cindy Baker'
+                        src={row.classTeacher.profilePic}
+                        style={{ marginLeft: 'auto' }}
+                      />
+                    </TableCell>
+                    <TableCell style={{ fontSize: '1.6rem' }} align='right'>
+                      {row.name}
+                    </TableCell>
+                    <TableCell style={{ fontSize: '1.6rem' }} align='right'>
+                      {row.mobile || 'n/a'}
+                    </TableCell>
+                    <TableCell style={{ fontSize: '1.6rem' }} align='right'>
+                      {new Date(row.batch).getFullYear() || 'n/a'}
+                    </TableCell>
+                    <TableCell style={{ fontSize: '1.6rem' }} align='right'>
+                      <div>
+                        <IconButton onClick={() => changeRoute(row)}>
+                          <Icon name='eye' style={{ fill: '#444' }} />
+                        </IconButton>
 
-                      <IconButton>
-                        <Icon name='edit' style={{ fill: '#3f51b5' }} />
-                      </IconButton>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
+                        <IconButton>
+                          <Icon name='edit' style={{ fill: '#3f51b5' }} />
+                        </IconButton>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
           </TableBody>
         </Table>
       </TableContainer>

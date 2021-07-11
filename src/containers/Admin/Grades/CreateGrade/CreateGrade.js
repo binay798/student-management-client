@@ -4,13 +4,14 @@ import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Icon from './../../../../components/UI/Icon/Icon';
 import { InputAdornment, Avatar, IconButton, Button } from '@material-ui/core';
-import { imgUrl } from './../../Admin';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import axios from './../../../../axios-instance/axiosInstance';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { createGrade } from './../../../../store/actionCreators/index';
+import { useDispatch } from 'react-redux';
 
 function CreateGrade() {
   const [teacher, setTeacher] = React.useState('');
@@ -18,6 +19,13 @@ function CreateGrade() {
   const [teacherList, setTeacherList] = useState([]);
   const [subject, setSubject] = useState('');
   const [subjectList, setSubjectList] = useState([]);
+  const [grade, setGrade] = useState('');
+  const [batch, setBatch] = useState('');
+  const [gradeTotalFee, setGradeTotalFee] = useState(0);
+  const [classTeacher, setClassTeacher] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const dispatch = useDispatch();
 
   const addSubjects = () => {
     if (!subject && !teacher) return;
@@ -29,7 +37,27 @@ function CreateGrade() {
     setTeacher('');
     setSubject('');
   };
-  console.log(subjectList);
+
+  const submitHandler = () => {
+    if (
+      grade !== '' &&
+      batch !== '' &&
+      gradeTotalFee !== 0 &&
+      studentList.length !== 0 &&
+      teacherList.length !== 0 &&
+      classTeacher !== ''
+    ) {
+      let data = {
+        name: grade,
+        batch: batch,
+        totalGradeFee: gradeTotalFee,
+        allStudents: studentList,
+        allSubjects: subjectList,
+        classTeacher,
+      };
+      dispatch(createGrade(data, setLoading));
+    }
+  };
 
   return (
     <Paper className={classes.grade}>
@@ -41,18 +69,24 @@ function CreateGrade() {
             label='Grade name'
             className={classes.grade__form__inp}
             variant='outlined'
+            value={grade}
+            onChange={(e) => setGrade(e.target.value)}
           />
           <TextField
             label='Batch'
             type='number'
             className={classes.grade__form__inp}
             variant='outlined'
+            value={batch}
+            onChange={(e) => setBatch(e.target.value)}
           />
           <TextField
             label='Grade total fee'
             type='number'
             className={classes.grade__form__inp}
             variant='outlined'
+            value={gradeTotalFee}
+            onChange={(e) => setGradeTotalFee(e.target.value)}
           />
         </div>
 
@@ -143,12 +177,41 @@ function CreateGrade() {
           </ul>
         </div>
 
+        {/* Class teacher */}
+        <h2>Select class teacher</h2>
+        <FormControl
+          variant='outlined'
+          className={classes.grade__form__inp}
+          style={{ maxWidth: '20rem' }}
+        >
+          <InputLabel id='demo-simple-select-outlined-label'>
+            Select teacher
+          </InputLabel>
+          <Select
+            labelId='demo-simple-select-outlined-label'
+            id='demo-simple-select-outlined'
+            value={classTeacher}
+            onChange={(e) => setClassTeacher(e.target.value)}
+            label='Age'
+          >
+            <MenuItem value=''>
+              <em>None</em>
+            </MenuItem>
+
+            {teacherList.map((item) => {
+              return <MenuItem value={item}>{item.firstname}</MenuItem>;
+            })}
+          </Select>
+        </FormControl>
+
         <Button
           variant='contained'
           color='primary'
           style={{ marginLeft: 'auto', display: 'block' }}
+          onClick={submitHandler}
+          disabled={loading}
         >
-          Submit
+          {loading ? 'Please wait...' : 'Submit'}
         </Button>
       </div>
     </Paper>

@@ -38,6 +38,7 @@ function CreateUser() {
   const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
+  console.log(error);
 
   const submitHandler = (e) => {
     e.preventDefault();

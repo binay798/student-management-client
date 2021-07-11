@@ -8,7 +8,6 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import Icon from './../../../components/UI/Icon/Icon';
 import { updateUser } from './../../../store/actionCreators/index';
 import { connect } from 'react-redux';
 
