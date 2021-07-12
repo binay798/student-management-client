@@ -46,7 +46,6 @@ function Events() {
   function getEvents(){ //api call to retrieve events.
     axiosInstance.get('api/v1/events')
       .then(function(response){
-	console.log(response.data.events);
 	setEvents(response.data.events);
 	setLoading(false);
       })
@@ -57,20 +56,21 @@ function Events() {
 
   async function handleSubmit(e){
     e.preventDefault();
+    var _name = e.target[0].value;
+    var _description = e.target[2].value;
 
     //api call to store the field values.
     await axiosInstance.post('/api/v1/events', {
-        name: e.target[0].value,
-        description: e.target[2].value
+        name: _name,
+        description: _description 
       })
       .then(function(response){
         console.log(response);
+	setEvents(events => events.concat({name: _name, description: _description}));
       })
       .catch(function(error){
         console.log(error);
       })
-
-    getEvents(); //run getEvents() function again to update the right container. 
   }
 
   return (
