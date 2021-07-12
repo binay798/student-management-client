@@ -54,13 +54,13 @@ function Events() {
       });
   }
 
-  async function handleSubmit(e){
+  function handleSubmit(e){
     e.preventDefault();
     var _name = e.target[0].value;
     var _description = e.target[2].value;
 
     //api call to store the field values.
-    await axiosInstance.post('/api/v1/events', {
+    axiosInstance.post('/api/v1/events', {
         name: _name,
         description: _description 
       })
