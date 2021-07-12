@@ -1,8 +1,10 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import classes from './Events.module.scss';
 import { Paper, TextField, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import shortenText from '../../../utlis/shortenText';
+import axiosInstance from '../../../axios-instance/axiosInstance.js';
+import { CircularProgress } from '@material-ui/core';
 
 const useStyles = makeStyles(() => {
   return {
@@ -32,13 +34,51 @@ const useStyles = makeStyles(() => {
 });
 
 function Events() {
+
   const styles = useStyles();
+  const [events, setEvents] = useState([]); //list to store events
+  const [loading, setLoading] = useState(true); //used to show circular progress when data is being fetched
+
+  useEffect(() => {
+    getEvents(); //get events in db as soon as the component mounts.
+  }, []);
+
+  function getEvents(){ //api call to retrieve events.
+    axiosInstance.get('api/v1/events')
+      .then(function(response){
+	console.log(response.data.events);
+	setEvents(response.data.events);
+	setLoading(false);
+      })
+      .catch(function(error){
+	console.log(error);
+      });
+  }
+
+  async function handleSubmit(e){
+    e.preventDefault();
+
+    //api call to store the field values.
+    await axiosInstance.post('/api/v1/events', {
+        name: e.target[0].value,
+        description: e.target[2].value
+      })
+      .then(function(response){
+        console.log(response);
+      })
+      .catch(function(error){
+        console.log(error);
+      })
+
+    getEvents(); //run getEvents() function again to update the right container. 
+  }
+
   return (
     <div className={classes.events}>
       <div className={classes.events__container}>
         <Paper className={classes.events__left}>
           <h2 className={classes.events__head}>Create events</h2>
-          <form className={classes.events__form}>
+          <form className={classes.events__form} onSubmit={handleSubmit}>
             <TextField
               id='outlined-basic'
               label='Event topic'
@@ -53,7 +93,7 @@ function Events() {
               className={styles.root}
               variant='outlined'
             />
-            <Button variant='contained' className={styles.btn} color='primary'>
+            <Button type="submit" variant='contained' className={styles.btn} color='primary'>
               Submit
             </Button>
           </form>
@@ -63,66 +103,21 @@ function Events() {
           <h2 className={classes.events__head} style={{ marginBottom: '0' }}>
             Recent events
           </h2>
-
-          {/* container */}
-          <div className={classes.events__right__container}>
-            <div className={classes.events__item}>
-              <h2>Holiday update</h2>
-              <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint
-                libero enim itaque.
-              </p>
-            </div>
-            <div className={classes.events__item}>
-              <h2>Holiday update</h2>
-              <p>
-                {shortenText(
-                  'Lorem ipsum dolor sit amet consectetur adipisicing elit. temporibus enim? Culpa, expedita! Molestias ducimus atque corporis a amet, debitis perferendis officiis eum.'
-                )}
-              </p>
-            </div>
-            <div className={classes.events__item}>
-              <h2>Holiday update</h2>
-              <p>
-                {shortenText(
-                  'Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint libero enim itaque.'
-                )}
-              </p>
-            </div>
-            <div className={classes.events__item}>
-              <h2>Holiday update</h2>
-              <p>
-                {shortenText(
-                  'Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint libero enim itaque.'
-                )}
-              </p>
-            </div>
-            <div className={classes.events__item}>
-              <h2>Holiday update</h2>
-              <p>
-                {shortenText(
-                  'Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint libero enim itaque.'
-                )}
-              </p>
-            </div>
-            <div className={classes.events__item}>
-              <h2>Holiday update</h2>
-              <p>
-                {shortenText(
-                  'Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint libero enim itaque.'
-                )}
-              </p>
-            </div>
-            <div className={classes.events__item}>
-              <h2>Holiday update</h2>
-              <p>
-                {shortenText(
-                  'Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint libero enim itaque.'
-                )}
-              </p>
-            </div>
-          </div>
-
+          {loading &&
+	    <CircularProgress/>
+	  }
+          {!loading &&
+	    <div className={classes.events__right__container}>
+              {events.map((eve) =>
+		<div className={classes.events__item}>
+		  <h2>{eve.name}</h2>
+		  <p>
+		    {eve.description}
+		  </p>
+		</div>
+	      )}
+	    </div>
+	  }
           {/* button */}
           <Button
             className={classes.events__right__btn}
