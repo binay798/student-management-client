@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import shortenText from '../../../utlis/shortenText';
 import axiosInstance from '../../../axios-instance/axiosInstance.js';
 import { CircularProgress } from '@material-ui/core';
+import Moment from 'react-moment';
 
 const useStyles = makeStyles(() => {
   return {
@@ -46,6 +47,7 @@ function Events() {
   function getEvents(){ //api call to retrieve events.
     axiosInstance.get('api/v1/events')
       .then(function(response){
+	console.log(response.data.events);
 	setEvents(response.data.events);
 	setLoading(false);
       })
@@ -66,7 +68,7 @@ function Events() {
       })
       .then(function(response){
         console.log(response);
-	setEvents(events => events.concat({name: _name, description: _description}));
+	setEvents(events => events.concat({name: _name, description: _description, createdAt: Date.now()}));
       })
       .catch(function(error){
         console.log(error);
@@ -114,6 +116,7 @@ function Events() {
 		  <p>
 		    {eve.description}
 		  </p>
+		  <i><span className={classes.events__moment}><Moment fromNow>{eve.createdAt}</Moment></span></i>
 		</div>
 	      )}
 	    </div>
