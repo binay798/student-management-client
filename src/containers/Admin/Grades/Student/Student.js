@@ -11,6 +11,7 @@ import {
 } from './../../../../store/actionCreators/index';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
+import Result from './Result/Result';
 
 function Student() {
   const globalState = useSelector((state) => state.grade.selectedStudent);
@@ -112,6 +113,13 @@ function Student() {
           </form>
         </div>
       </div>
+
+      {/* Results section */}
+      <Result
+        studentId={globalState.student._id}
+        batch={globalState.batch}
+        grade={globalState.grade}
+      />
     </Paper>
   );
 }

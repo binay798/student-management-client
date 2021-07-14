@@ -39,7 +39,9 @@ function Grade() {
             Grade {globalState.selectedGrade.name}
           </h1>
           <Chip
-            label={`Batch 2021`}
+            label={`Batch ${new Date(
+              globalState.selectedGrade.batch
+            ).getFullYear()}`}
             color='secondary'
             variant='outlined'
             className={classes.chip}
