@@ -6,6 +6,8 @@ import shortenText from '../../../utlis/shortenText';
 import axiosInstance from '../../../axios-instance/axiosInstance.js';
 import { CircularProgress } from '@material-ui/core';
 import Moment from 'react-moment';
+import * as actionCreators from './../../../store/actionCreators/index';
+import { useSelector, useDispatch } from 'react-redux';
 
 const useStyles = makeStyles(() => {
   return {
@@ -37,42 +39,24 @@ const useStyles = makeStyles(() => {
 function Events() {
 
   const styles = useStyles();
-  const [events, setEvents] = useState([]); //list to store events
-  const [loading, setLoading] = useState(true); //used to show circular progress when data is being fetched
+  const globalState = useSelector((state) => state.events);
+  const dispatch = useDispatch();
+  const [loading, setLoading] = useState(false); //used to show circular progress when data is being fetched
 
   useEffect(() => {
-    getEvents(); //get events in db as soon as the component mounts.
-  }, []);
-
-  function getEvents(){ //api call to retrieve events.
-    axiosInstance.get('api/v1/events')
-      .then(function(response){
-	console.log(response.data.events);
-	setEvents(response.data.events);
-	setLoading(false);
-      })
-      .catch(function(error){
-	console.log(error);
-      });
-  }
+    if(globalState.events == null){
+      dispatch(actionCreators.getEvents(setLoading));
+    }
+  }, [dispatch, globalState]);
 
   function handleSubmit(e){
     e.preventDefault();
+
     var _name = e.target[0].value;
     var _description = e.target[2].value;
 
-    //api call to store the field values.
-    axiosInstance.post('/api/v1/events', {
-        name: _name,
-        description: _description 
-      })
-      .then(function(response){
-        console.log(response);
-	setEvents(events => events.concat({name: _name, description: _description, createdAt: Date.now()}));
-      })
-      .catch(function(error){
-        console.log(error);
-      })
+    dispatch(actionCreators.addEvent({name: _name, description: _description}));
+
   }
 
   return (
@@ -108,9 +92,9 @@ function Events() {
           {loading &&
 	    <CircularProgress/>
 	  }
-          {!loading &&
+          {globalState.events &&
 	    <div className={classes.events__right__container}>
-              {events.map((eve) =>
+              {globalState.events.map((eve) =>
 		<div className={classes.events__item}>
 		  <h2>{eve.name}</h2>
 		  <p>
