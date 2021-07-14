@@ -1,30 +1,41 @@
 import React, { useState, useEffect } from 'react';
 import classes from './Result.module.scss';
-import { Button, ButtonGroup, TextField } from '@material-ui/core';
+import {
+  Button,
+  ButtonGroup,
+  TextField,
+  CircularProgress,
+} from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 import Icon from '../../../../../components/UI/Icon/Icon';
 import {
   createResult,
   getResults,
+  deleteResult,
 } from '../../../../../store/actionCreators/index';
+import initializeState from '../../../../../utlis/initializeState';
 
-const img =
-  'https://see.results.news/wp-content/uploads/2019/08/SEE-Result-With-Marksheet-.png';
 function Result(props) {
   const [title, setTitle] = useState('');
   const [imgSrc, setImgSrc] = useState('');
   const [createResultLoading, setCreateResultLoading] = useState(false);
   const dispatch = useDispatch();
   const globalState = useSelector((state) => state.result);
+  const [getResultsLoading, setGetResultsLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   useEffect(() => {
-    if (globalState.results) return;
+    // empty result at first
+
     dispatch(
-      getResults({
-        id: props.studentId,
-        batch: props.batch,
-        grade: props.grade,
-      })
+      getResults(
+        {
+          id: props.studentId,
+          batch: props.batch,
+          grade: props.grade,
+        },
+        setGetResultsLoading
+      )
     );
   }, []);
 
@@ -42,12 +53,22 @@ function Result(props) {
     } else {
       console.log('error');
     }
+    initializeState([setTitle, setImgSrc]);
+  };
+
+  // delete result
+  const deleteHandler = (id) => {
+    dispatch(
+      deleteResult({ userId: props.studentId, resultId: id }, setDeleteLoading)
+    );
   };
   return (
     <div className={classes.result}>
       <div className={classes.result__left}>
         <h2>All Results</h2>
         <ul>
+          {/* loading */}
+          {getResultsLoading ? <CircularProgress /> : null}
           {globalState.results &&
             globalState.results.map((item, id) => {
               return (
@@ -60,8 +81,13 @@ function Result(props) {
                       color='primary'
                       aria-label='contained primary button group'
                     >
-                      <Button>Edit</Button>
-                      <Button color='secondary'>Delete</Button>
+                      <Button
+                        onClick={() => deleteHandler(item._id)}
+                        color='secondary'
+                        disabled={deleteLoading}
+                      >
+                        {deleteLoading ? 'Deleting...' : 'Delete'}
+                      </Button>
                     </ButtonGroup>
                   </div>
 
@@ -107,8 +133,9 @@ function Result(props) {
             type='submit'
             className={classes.btn}
             color='primary'
+            disabled={createResultLoading}
           >
-            Submit
+            {createResultLoading ? <CircularProgress /> : 'Submit'}
           </Button>
         </form>
       </div>

@@ -1,4 +1,9 @@
-import { CREATE_RESULT, GET_RESULTS } from './../actions/index';
+import {
+  CREATE_RESULT,
+  GET_RESULTS,
+  ADD_RESULT,
+  DELETE_RESULT,
+} from './../actions/index';
 import axios from '../../axios-instance/axiosInstance';
 
 export const createResult = (data, setLoading) => {
@@ -10,15 +15,17 @@ export const createResult = (data, setLoading) => {
         data
       );
       console.log(res);
-      console.log(data);
+      dispatch({ type: ADD_RESULT, payload: res.data.result });
     } catch (err) {
       console.log(err.message);
     }
+    setLoading(false);
   };
 };
 
-export const getResults = (data) => {
+export const getResults = (data, setLoading) => {
   return async (dispatch) => {
+    setLoading(true);
     try {
       let res = await axios.get(
         `/api/v1/users/results/${data.batch}/${data.grade}/${data.id}`
@@ -27,5 +34,21 @@ export const getResults = (data) => {
     } catch (err) {
       console.log(err.message);
     }
+    setLoading(false);
+  };
+};
+
+export const deleteResult = (data, setLoading) => {
+  return async (dispatch) => {
+    setLoading(true);
+    try {
+      let res = await axios.patch(
+        `/api/v1/users/results/${data.userId}/${data.resultId}`
+      );
+      dispatch({ type: DELETE_RESULT, payload: { id: data.resultId } });
+    } catch (err) {
+      console.log(err.message);
+    }
+    setLoading(false);
   };
 };

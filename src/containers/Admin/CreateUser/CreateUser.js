@@ -36,6 +36,8 @@ function CreateUser() {
   const [imgUrl, setImgUrl] = useState('');
   const [gender, setGender] = useState('male');
   const [loading, setLoading] = useState(false);
+  const [grade, setGrade] = useState('');
+  const [batch, setBatch] = useState('');
 
   const dispatch = useDispatch();
   console.log(error);
@@ -68,6 +70,8 @@ function CreateUser() {
                 mobile,
                 profilePic: imgUrl,
                 gender,
+                grade,
+                batch,
               },
               setLoading
             )
@@ -174,6 +178,27 @@ function CreateUser() {
             />
           </div>
 
+          <div
+            className={classes.user__form__bottom}
+            style={{ display: role === 'student' ? 'flex' : 'none' }}
+          >
+            <TextField
+              label='Grade'
+              type='number'
+              className={classes.user__inp}
+              variant='outlined'
+              value={grade}
+              onChange={(e) => setGrade(e.target.value)}
+            />
+            <TextField
+              label='Batch'
+              type='number'
+              className={classes.user__inp}
+              variant='outlined'
+              value={batch}
+              onChange={(e) => setBatch(e.target.value)}
+            />
+          </div>
           <div className={classes.user__form__bottom}>
             <FormControl variant='outlined' className={classes.user__inp}>
               <InputLabel htmlFor='outlined-adornment-password'>
