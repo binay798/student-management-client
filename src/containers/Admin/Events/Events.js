@@ -1,8 +1,8 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import classes from './Events.module.scss';
 import { Paper, TextField, Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
-import shortenText from '../../../utlis/shortenText';
+// import shortenText from '../../../utlis/shortenText';
 import axiosInstance from '../../../axios-instance/axiosInstance.js';
 import { CircularProgress } from '@material-ui/core';
 
@@ -34,7 +34,6 @@ const useStyles = makeStyles(() => {
 });
 
 function Events() {
-
   const styles = useStyles();
   const [events, setEvents] = useState([]); //list to store events
   const [loading, setLoading] = useState(true); //used to show circular progress when data is being fetched
@@ -43,34 +42,39 @@ function Events() {
     getEvents(); //get events in db as soon as the component mounts.
   }, []);
 
-  function getEvents(){ //api call to retrieve events.
-    axiosInstance.get('api/v1/events')
-      .then(function(response){
-	setEvents(response.data.events);
-	setLoading(false);
+  function getEvents() {
+    //api call to retrieve events.
+    axiosInstance
+      .get('api/v1/events')
+      .then(function (response) {
+        setEvents(response.data.events);
+        setLoading(false);
       })
-      .catch(function(error){
-	console.log(error);
+      .catch(function (error) {
+        console.log(error);
       });
   }
 
-  async function handleSubmit(e){
+  async function handleSubmit(e) {
     e.preventDefault();
     var _name = e.target[0].value;
     var _description = e.target[2].value;
 
     //api call to store the field values.
-    await axiosInstance.post('/api/v1/events', {
+    await axiosInstance
+      .post('/api/v1/events', {
         name: _name,
-        description: _description 
+        description: _description,
       })
-      .then(function(response){
+      .then(function (response) {
         console.log(response);
-	setEvents(events => events.concat({name: _name, description: _description}));
+        setEvents((events) =>
+          events.concat({ name: _name, description: _description })
+        );
       })
-      .catch(function(error){
+      .catch(function (error) {
         console.log(error);
-      })
+      });
   }
 
   return (
@@ -93,7 +97,12 @@ function Events() {
               className={styles.root}
               variant='outlined'
             />
-            <Button type="submit" variant='contained' className={styles.btn} color='primary'>
+            <Button
+              type='submit'
+              variant='contained'
+              className={styles.btn}
+              color='primary'
+            >
               Submit
             </Button>
           </form>
@@ -103,21 +112,17 @@ function Events() {
           <h2 className={classes.events__head} style={{ marginBottom: '0' }}>
             Recent events
           </h2>
-          {loading &&
-	    <CircularProgress/>
-	  }
-          {!loading &&
-	    <div className={classes.events__right__container}>
-              {events.map((eve) =>
-		<div className={classes.events__item}>
-		  <h2>{eve.name}</h2>
-		  <p>
-		    {eve.description}
-		  </p>
-		</div>
-	      )}
-	    </div>
-	  }
+          {loading && <CircularProgress />}
+          {!loading && (
+            <div className={classes.events__right__container}>
+              {events.map((eve) => (
+                <div className={classes.events__item}>
+                  <h2>{eve.name}</h2>
+                  <p>{eve.description}</p>
+                </div>
+              ))}
+            </div>
+          )}
           {/* button */}
           <Button
             className={classes.events__right__btn}

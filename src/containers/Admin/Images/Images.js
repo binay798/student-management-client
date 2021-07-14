@@ -36,7 +36,7 @@ function Images() {
 
   useEffect(() => {
     dispatch(getImages(setInitialLoading));
-  }, []);
+  }, [dispatch]);
 
   const changeHandler = (e) => {
     let file = e.target.files[0];

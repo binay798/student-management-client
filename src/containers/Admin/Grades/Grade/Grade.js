@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Paper from '@material-ui/core/Paper';
 import classes from './Grade.module.scss';
 import Chip from '@material-ui/core/Chip';
@@ -9,25 +9,37 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 import TableHead from '@material-ui/core/TableHead';
-import { Avatar, IconButton } from '@material-ui/core';
-import { imgUrl } from './../../Admin';
-import { Link } from 'react-router-dom';
+import { Avatar, IconButton, CircularProgress } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
 import Icon from '../../../../components/UI/Icon/Icon';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { getSelectedGrade } from './../../../../store/actionCreators/index';
 
 function Grade() {
   const globalState = useSelector((state) => state.grade);
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const gradeId = history.location.pathname.split('/')[3];
+  const [loading, setLoading] = useState(false);
 
-  if (globalState.selectedGrade === null) {
-    return <p>Grade not selected</p>;
+  // Get selected grade
+  useEffect(() => {
+    dispatch(getSelectedGrade(gradeId, setLoading));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (loading || !globalState.selectedGrade) {
+    return <CircularProgress />;
   }
   return (
     <Paper className={classes.grade}>
       <div className={classes.grade__header}>
         <div className={classes.grade__header__left}>
-          <h1 className={classes.grade__head}>Grade 10</h1>
+          <h1 className={classes.grade__head}>
+            Grade {globalState.selectedGrade.name}
+          </h1>
           <Chip
-            label='Batch 2021'
+            label={`Batch 2021`}
             color='secondary'
             variant='outlined'
             className={classes.chip}
@@ -35,7 +47,8 @@ function Grade() {
         </div>
         <div className={classes.grade__header__right}>
           <p>
-            <strong>Total annual fee:</strong> Rs 24,000
+            <strong>Total annual fee:</strong> Rs
+            {globalState.selectedGrade.totalGradeFee}
           </p>
         </div>
       </div>
@@ -45,6 +58,8 @@ function Grade() {
           <StudentTable
             students={globalState.selectedGrade.allStudents}
             gradeId={globalState.selectedGrade._id}
+            batch={globalState.selectedGrade.batch}
+            class={globalState.selectedGrade.name}
           />
         </div>
         <div className={classes.grade__top__right}>
@@ -66,7 +81,13 @@ const useStyles = makeStyles({
 
 function StudentTable(props) {
   const styles = useStyles();
-  console.log(props);
+  // const dispatch = useDispatch();
+  const history = useHistory();
+
+  // select student and change route
+  const selectCurrentStudent = (data) => {
+    history.push(`/admin/grades/${props.gradeId}/${data._id}`);
+  };
   return (
     <Paper className={styles.root}>
       <TableContainer className={styles.container}>
@@ -114,7 +135,7 @@ function StudentTable(props) {
               >
                 Mobile
               </TableCell>
-              <TableCell
+              {/* <TableCell
                 align='right'
                 style={{
                   fontSize: '1.8rem',
@@ -123,7 +144,7 @@ function StudentTable(props) {
                 }}
               >
                 Batch
-              </TableCell>
+              </TableCell> */}
               <TableCell
                 align='right'
                 style={{
@@ -139,36 +160,31 @@ function StudentTable(props) {
           <TableBody>
             {props.students &&
               props.students.map((row, id) => {
-                // console.log(row);
                 return (
                   <TableRow key={id} hover role='checkbox' tabIndex={-1}>
                     <TableCell className={classes.table} align='left'>
-                      {row.firstname} {row.lastname}
+                      {row.student.firstname} {row.student.lastname}
                     </TableCell>
                     <TableCell className={classes.table} align='center'>
-                      {row.roll}
+                      {row.rollNumber}
                     </TableCell>
                     <TableCell className={classes.table} align='right'>
                       <Avatar
                         alt='Cindy Baker'
-                        src={row.profilePic}
+                        src={row.student.profilePic}
                         style={{ marginLeft: 'auto' }}
                       />
                     </TableCell>
                     <TableCell className={classes.table} align='right'>
-                      {row.mobile}
+                      {row.student.mobile}
                     </TableCell>
+                    {/* <TableCell className={classes.table} align='right'>
+                      {new Date(props.batch).getFullYear()}
+                    </TableCell> */}
                     <TableCell className={classes.table} align='right'>
-                      {new Date(row.batch).getFullYear()}
-                    </TableCell>
-                    <TableCell className={classes.table} align='right'>
-                      <div>
-                        <Link to={`/admin/grades/${props.gradeId}/${row._id};`}>
-                          <IconButton>
-                            <Icon name='eye' style={{ fill: '#444' }} />
-                          </IconButton>
-                        </Link>
-                      </div>
+                      <IconButton onClick={() => selectCurrentStudent(row)}>
+                        <Icon name='eye' style={{ fill: '#444' }} />
+                      </IconButton>
                     </TableCell>
                   </TableRow>
                 );

@@ -12,12 +12,8 @@ import { Button, FormControl, InputLabel, Select } from '@material-ui/core';
 import Icon from './../../../components/UI/Icon/Icon';
 import MenuItem from '@material-ui/core/MenuItem';
 import { Link, useHistory } from 'react-router-dom';
-import { Avatar, IconButton } from '@material-ui/core';
-import { imgUrl } from './../Admin';
-import {
-  getAllGrades,
-  selectGrade,
-} from './../../../store/actionCreators/index';
+import { Avatar, IconButton, CircularProgress } from '@material-ui/core';
+import { getAllGrades } from './../../../store/actionCreators/index';
 import { useDispatch, useSelector } from 'react-redux';
 
 function Grades() {
@@ -69,12 +65,14 @@ function StickyHeadTable() {
   const globalState = useSelector((state) => state.grade);
 
   useEffect(() => {
+    if (globalState.allGrades) return;
+    console.log('passes through');
     dispatch(getAllGrades());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // select grade and change route
   const changeRoute = (data) => {
-    dispatch(selectGrade(data));
     history.push('/admin/grades/' + data._id);
   };
 
@@ -122,6 +120,10 @@ function StickyHeadTable() {
               </TableCell>
             </TableRow>
           </TableHead>
+          {/* circular progress */}
+          <CircularProgress
+            style={{ display: !globalState.allGrades ? 'block' : 'none' }}
+          />
           <TableBody>
             {globalState.allGrades &&
               globalState.allGrades.map((row, id) => {
@@ -141,21 +143,19 @@ function StickyHeadTable() {
                       {row.name}
                     </TableCell>
                     <TableCell style={{ fontSize: '1.6rem' }} align='right'>
-                      {row.mobile || 'n/a'}
+                      {row.classTeacher.mobile || 'n/a'}
                     </TableCell>
                     <TableCell style={{ fontSize: '1.6rem' }} align='right'>
                       {new Date(row.batch).getFullYear() || 'n/a'}
                     </TableCell>
                     <TableCell style={{ fontSize: '1.6rem' }} align='right'>
-                      <div>
-                        <IconButton onClick={() => changeRoute(row)}>
-                          <Icon name='eye' style={{ fill: '#444' }} />
-                        </IconButton>
+                      <IconButton onClick={() => changeRoute(row)}>
+                        <Icon name='eye' style={{ fill: '#444' }} />
+                      </IconButton>
 
-                        <IconButton>
-                          <Icon name='edit' style={{ fill: '#3f51b5' }} />
-                        </IconButton>
-                      </div>
+                      <IconButton>
+                        <Icon name='edit' style={{ fill: '#3f51b5' }} />
+                      </IconButton>
                     </TableCell>
                   </TableRow>
                 );

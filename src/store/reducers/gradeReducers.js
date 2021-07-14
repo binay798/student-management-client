@@ -1,7 +1,9 @@
 import * as actionTypes from './../actions/index';
+// import produce from 'immer';
 const initialState = {
   allGrades: null,
   selectedGrade: null,
+  selectedStudent: null,
 };
 
 const reducer = (state = initialState, action) => {
@@ -15,6 +17,19 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         selectedGrade: action.payload,
+      };
+    case actionTypes.SELECT_STUDENT:
+      return {
+        ...state,
+        selectedStudent: action.payload,
+      };
+    case actionTypes.UPDATE_STUDENT_ROLL_NUMBER:
+      return {
+        ...state,
+        selectedStudent: {
+          ...state.selectedStudent,
+          rollNumber: action.payload.rollNumber,
+        },
       };
     default:
       return state;
