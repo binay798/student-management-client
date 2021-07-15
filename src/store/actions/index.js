@@ -4,3 +4,4 @@ export * from './userActions';
 export * from './imageActions';
 export * from './gradeActions';
 export * from './resultActions';
+export * from './paymentActions';

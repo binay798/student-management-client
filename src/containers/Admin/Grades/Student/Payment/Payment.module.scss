@@ -1,0 +1,38 @@
+.payment {
+  margin-top: 4rem;
+  &__container {
+    display: flex;
+  }
+
+  &__left {
+    flex: 1;
+  }
+
+  &__right {
+    flex: 1;
+
+    &__form {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      &__inp {
+        width: 100% !important;
+        display: block !important;
+
+        & > * {
+          font-size: 1.4rem !important;
+          width: 100% !important;
+        }
+      }
+    }
+  }
+}
+
+.imgPreview {
+  display: block;
+  width: 100%;
+}
+
+.btn {
+  font-size: 1.4rem !important;
+}
