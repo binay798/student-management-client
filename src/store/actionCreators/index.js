@@ -4,3 +4,4 @@ export * from './users';
 export * from './images';
 export * from './grade';
 export * from './results';
+export * from './payments';

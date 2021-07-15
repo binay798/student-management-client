@@ -123,7 +123,11 @@ function Student() {
       />
 
       {/* Payments section */}
-      <Payment />
+      <Payment
+        studentId={globalState.student._id}
+        batch={globalState.batch}
+        grade={globalState.grade}
+      />
     </Paper>
   );
 }

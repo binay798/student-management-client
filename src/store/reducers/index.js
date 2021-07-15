@@ -5,6 +5,7 @@ import userReducers from './userReducers';
 import imageReducers from './imageReducers';
 import gradeReducers from './gradeReducers';
 import resultReducers from './resultReducers';
+import paymentReducers from './paymentReducers';
 
 const rootReducers = combineReducers({
   teachers: teacherReducers,
@@ -13,6 +14,7 @@ const rootReducers = combineReducers({
   image: imageReducers,
   grade: gradeReducers,
   result: resultReducers,
+  payment: paymentReducers,
 });
 
 export default rootReducers;
