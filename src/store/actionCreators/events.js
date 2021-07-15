@@ -6,6 +6,7 @@ export const getEvents = (setLoading) => {
     setLoading(true);
     try{
       let res = await axios.get('api/v1/events?sort=-createdAt');
+      res.data.events.reverse();
       dispatch({ type: actionTypes.GET_EVENTS, payload: res.data.events });
     } catch(err) {
       console.log(err.message);
@@ -14,8 +15,9 @@ export const getEvents = (setLoading) => {
   };
 };
 
-export const addEvent = (data) => {
+export const addEvent = (data, setLoading) => {
   return async (dispatch) => {
+    setLoading(true);
     try{
       let res = await axios.post('/api/v1/events', data);
       //console.log(res);
@@ -24,5 +26,6 @@ export const addEvent = (data) => {
     catch (err) {
       console.log(err.message);
     }
+    setLoading(false);
   };
 }

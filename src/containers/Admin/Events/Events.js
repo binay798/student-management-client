@@ -55,35 +55,40 @@ function Events() {
     var _name = e.target[0].value;
     var _description = e.target[2].value;
 
-    dispatch(actionCreators.addEvent({name: _name, description: _description}));
+    dispatch(actionCreators.addEvent({name: _name, description: _description}, setLoading));
 
   }
 
   return (
     <div className={classes.events}>
       <div className={classes.events__container}>
-        <Paper className={classes.events__left}>
-          <h2 className={classes.events__head}>Create events</h2>
-          <form className={classes.events__form} onSubmit={handleSubmit}>
-            <TextField
-              id='outlined-basic'
-              label='Event topic'
-              variant='outlined'
-              className={classes.events__form__inp}
-            />
-            <TextField
-              id='outlined-multiline-static'
-              label='Message'
-              multiline
-              rows={4}
-              className={styles.root}
-              variant='outlined'
-            />
-            <Button type="submit" variant='contained' className={styles.btn} color='primary'>
-              Submit
-            </Button>
-          </form>
-        </Paper>
+        <div className={classes.events__left}>
+          <Paper className={classes.events__top}>
+            <h2> test </h2>
+          </Paper>
+          <Paper className={classes.events__bottom}>
+            <h2 className={classes.events__head}>Create events</h2>
+            <form className={classes.events__form} onSubmit={handleSubmit}>
+              <TextField
+                id='outlined-basic'
+                label='Event topic'
+                variant='outlined'
+                className={classes.events__form__inp}
+              />
+              <TextField
+                id='outlined-multiline-static'
+                label='Message'
+                multiline
+                rows={4}
+                className={styles.root}
+                variant='outlined'
+              />
+              <Button type="submit" variant='contained' className={styles.btn} color='primary'>
+                Submit
+              </Button>
+            </form>
+          </Paper>
+        </div>
         <Paper className={classes.events__right}>
           {/* heading */}
           <h2 className={classes.events__head} style={{ marginBottom: '0' }}>
@@ -97,9 +102,10 @@ function Events() {
               {globalState.events.map((eve) =>
 		<div className={classes.events__item}>
 		  <h2>{eve.name}</h2>
-		  <p>
-		    {eve.description}
-		  </p>
+		  {eve.description.length > 60 
+		    ? <p>{shortenText(eve.description)}</p>
+		    : <p>{eve.description}</p>
+		  }
 		  <i><span className={classes.events__moment}><Moment fromNow>{eve.createdAt}</Moment></span></i>
 		</div>
 	      )}

@@ -23,7 +23,7 @@
   &__head {
     font-size: 3rem;
     font-weight: 300;
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
   }
 
   &__form {
@@ -40,15 +40,25 @@
   }
 
   &__left {
-    flex: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    flex: 1;
+  }
+
+  &__top {
+    flex: 1;
+  }
+
+  &__bottom {
     padding: 1rem;
   }
 
   &__right {
-    flex: 1;
     padding: 1rem;
     display: flex;
     flex-direction: column;
+    min-width: 35.5%;
     gap: 1rem;
     &__container {
       overflow-y: scroll;

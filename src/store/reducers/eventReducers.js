@@ -16,8 +16,8 @@ const reducers = (state = initialState, action) => {
       return {
 	...state,
 	events: [
-	  ...state.events,
-	  action.payload
+	  action.payload,
+	  ...state.events
 	]
       };
     default:
