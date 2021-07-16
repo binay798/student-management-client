@@ -5,8 +5,8 @@ export const getEvents = (setLoading) => {
   return async (dispatch) => {
     setLoading(true);
     try{
-      let res = await axios.get('api/v1/events?sort=-createdAt');
-      res.data.events.reverse();
+      let res = await axios.get('api/v1/events');
+      //res.data.events.reverse();
       dispatch({ type: actionTypes.GET_EVENTS, payload: res.data.events });
     } catch(err) {
       console.log(err.message);
