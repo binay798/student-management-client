@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import classes from './Result.module.scss';
-import {
-  Button,
-  ButtonGroup,
-  TextField,
-  CircularProgress,
-} from '@material-ui/core';
+import { Button, TextField, Paper, Modal } from '@material-ui/core';
 import { useSelector, useDispatch } from 'react-redux';
 import Icon from '../../../../../components/UI/Icon/Icon';
 import {
@@ -13,16 +8,17 @@ import {
   getResults,
   deleteResult,
 } from '../../../../../store/actionCreators/index';
-import initializeState from '../../../../../utlis/initializeState';
+import { Link } from 'react-router-dom';
+// import initializeState from '../../../../../utlis/initializeState';
 
 function Result(props) {
-  const [title, setTitle] = useState('');
-  const [imgSrc, setImgSrc] = useState('');
+  // const [title, setTitle] = useState('');
+  // const [imgSrc, setImgSrc] = useState('');
   const [createResultLoading, setCreateResultLoading] = useState(false);
   const dispatch = useDispatch();
   const globalState = useSelector((state) => state.result);
   const [getResultsLoading, setGetResultsLoading] = useState(false);
-  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [showCreateResultModal, setShowCreateResultModal] = useState(false);
 
   useEffect(() => {
     // empty result at first
@@ -39,12 +35,13 @@ function Result(props) {
     );
   }, []);
 
-  const submitHandler = (e) => {
+  const submitHandler = (e, data) => {
     e.preventDefault();
-    if (title !== '' && imgSrc !== '') {
+    console.log(data, 'submit handler');
+    if (data.title !== '' && data.imgSrc !== '') {
       const resultData = {
-        photoUrl: imgSrc,
-        title,
+        photoUrl: data.imgSrc,
+        title: data.title,
         grade: parseInt(props.grade),
         batch: props.batch,
         userId: props.studentId,
@@ -53,94 +50,121 @@ function Result(props) {
     } else {
       console.log('error');
     }
-    initializeState([setTitle, setImgSrc]);
+    setShowCreateResultModal(false);
   };
 
   // delete result
   const deleteHandler = (id) => {
-    dispatch(
-      deleteResult({ userId: props.studentId, resultId: id }, setDeleteLoading)
-    );
+    dispatch(deleteResult({ userId: props.studentId, resultId: id }));
   };
+
   return (
     <div className={classes.result}>
-      <div className={classes.result__left}>
-        <h2>All Results</h2>
-        <ul>
+      {/* Create result modal */}
+      <CreateResultModal
+        open={showCreateResultModal}
+        onClose={() => setShowCreateResultModal(false)}
+        onSubmit={submitHandler}
+        loading={createResultLoading}
+      />
+      <div className={classes.result__create}>
+        <h3 className={classes.result__heading}>Results</h3>
+        <Button
+          onClick={() => setShowCreateResultModal(true)}
+          variant='outlined'
+          color='primary'
+        >
+          Create result
+        </Button>
+      </div>
+      <div className={classes.result__container}>
+        <ul className={classes.result__tableHead}>
+          <li>Photo</li>
+          <li>Name</li>
+          <li>Actions</li>
+        </ul>
+        <ul className={classes.result__tableBody}>
           {/* loading */}
-          {getResultsLoading ? <CircularProgress /> : null}
+          {getResultsLoading ? 'Loading' : null}
+
           {globalState.results &&
-            globalState.results.map((item, id) => {
+            globalState.results.map((item) => {
               return (
-                <li key={id}>
-                  <div className={classes.result__left__head}>
-                    <h3>{item.title}</h3>
-
-                    <ButtonGroup
-                      variant='contained'
-                      color='primary'
-                      aria-label='contained primary button group'
-                    >
-                      <Button
-                        onClick={() => deleteHandler(item._id)}
-                        color='secondary'
-                        disabled={deleteLoading}
-                      >
-                        {deleteLoading ? 'Deleting...' : 'Delete'}
+                <li key={item._id} className={classes.result__tableBody__item}>
+                  <img
+                    className={classes.result__tableBody__img}
+                    src={item.photoUrl}
+                    alt={item.title}
+                  />
+                  <p>{item.title}</p>
+                  <div style={{ display: 'flex', gap: '1rem' }}>
+                    <a href={item.photoUrl} target='blank'>
+                      <Button variant='contained' color='primary'>
+                        View
                       </Button>
-                    </ButtonGroup>
-                  </div>
-
-                  <div>
-                    <img src={item.photoUrl} alt='marksheet' />
+                    </a>
+                    <Button
+                      variant='contained'
+                      onClick={() => deleteHandler(item._id)}
+                      color='secondary'
+                    >
+                      Delete
+                    </Button>
                   </div>
                 </li>
               );
             })}
         </ul>
       </div>
-
-      <div className={classes.result__right}>
-        <h2>Create result</h2>
-        <form onSubmit={submitHandler} className={classes.result__right__form}>
-          {/* image preview*/}
-          {imgSrc ? (
-            <img src={imgSrc} className={classes.imgPreview} alt='preview' />
-          ) : (
-            <Icon
-              name='image'
-              style={{ width: '20rem', height: '20rem', margin: '0 auto' }}
-            />
-          )}
-
-          <TextField
-            label='Image url'
-            className={classes.result__right__form__inp}
-            variant='outlined'
-            value={imgSrc}
-            onChange={(e) => setImgSrc(e.target.value)}
-          />
-
-          <TextField
-            label='Title'
-            className={classes.result__right__form__inp}
-            variant='outlined'
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-          <Button
-            variant='contained'
-            type='submit'
-            className={classes.btn}
-            color='primary'
-            disabled={createResultLoading}
-          >
-            {createResultLoading ? <CircularProgress /> : 'Submit'}
-          </Button>
-        </form>
-      </div>
     </div>
   );
 }
 
+function CreateResultModal(props) {
+  const [imgSrc, setImgSrc] = useState('');
+  const [title, setTitle] = useState('');
+  return (
+    <Modal open={props.open} onClose={props.onClose}>
+      <Paper className={classes.createResultModal}>
+        <h2>Create result</h2>
+
+        {imgSrc ? (
+          <img className={classes.preview} src={imgSrc} alt='preview' />
+        ) : (
+          <Icon className={classes.preview} name='image' />
+        )}
+
+        {/* Create result form */}
+        <form
+          onSubmit={(e) => props.onSubmit(e, { title, imgSrc })}
+          className={classes.createResultModal__form}
+        >
+          <TextField
+            className={classes.createResultModal__form__inp}
+            variant='outlined'
+            label='Title'
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+          <TextField
+            className={classes.createResultModal__form__inp}
+            variant='outlined'
+            label='Image url'
+            value={imgSrc}
+            onChange={(e) => setImgSrc(e.target.value)}
+          />
+          <Button
+            disabled={props.loading}
+            className={classes.btn}
+            variant='contained'
+            type='submit'
+            color='primary'
+          >
+            {props.loading ? 'Submitting...' : 'Submit'}
+          </Button>
+        </form>
+      </Paper>
+    </Modal>
+  );
+}
 export default Result;

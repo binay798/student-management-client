@@ -14,7 +14,6 @@ export const createResult = (data, setLoading) => {
         `/api/v1/users/addResult/${data.userId}`,
         data
       );
-      console.log(res);
       dispatch({ type: ADD_RESULT, payload: res.data.result });
     } catch (err) {
       console.log(err.message);
@@ -38,17 +37,15 @@ export const getResults = (data, setLoading) => {
   };
 };
 
-export const deleteResult = (data, setLoading) => {
+export const deleteResult = (data) => {
   return async (dispatch) => {
-    setLoading(true);
     try {
-      let res = await axios.patch(
+      await axios.patch(
         `/api/v1/users/results/${data.userId}/${data.resultId}`
       );
       dispatch({ type: DELETE_RESULT, payload: { id: data.resultId } });
     } catch (err) {
       console.log(err.message);
     }
-    setLoading(false);
   };
 };
