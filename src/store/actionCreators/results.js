@@ -1,9 +1,4 @@
-import {
-  CREATE_RESULT,
-  GET_RESULTS,
-  ADD_RESULT,
-  DELETE_RESULT,
-} from './../actions/index';
+import { GET_RESULTS, ADD_RESULT, DELETE_RESULT } from './../actions/index';
 import axios from '../../axios-instance/axiosInstance';
 
 export const createResult = (data, setLoading) => {

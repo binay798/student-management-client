@@ -1,47 +1,77 @@
 .payment {
-  margin-top: 4rem;
-  &__container {
+  max-width: 90rem;
+  margin: 0 auto;
+  margin-bottom: 5rem;
+
+  &__create {
     display: flex;
-    gap: 4rem;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
   }
 
-  &__left {
-    flex: 1;
+  // heading
+  &__heading {
+    font-weight: 300;
+    display: block;
+  }
 
-    &__head {
+  &__container {
+    border: 1px solid lightgray;
+    // padding: 1rem;
+  }
+
+  &__tableHead {
+    display: flex;
+    justify-content: space-between;
+    background-color: rgb(223, 217, 217);
+    padding: 1rem;
+  }
+  &__tableBody {
+    &__item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
     }
-
     &__img {
       display: block;
-      width: 100%;
+      width: 10rem;
     }
   }
+}
 
-  &__right {
-    flex: 1;
+.createPaymentModal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 1rem;
+  max-width: 40rem;
+  width: 100%;
 
-    &__form {
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
-      &__inp {
-        width: 100% !important;
-        display: block !important;
-
-        & > * {
-          font-size: 1.4rem !important;
-          width: 100% !important;
-        }
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    &__inp {
+      width: 100%;
+      & > * {
+        font-size: 1.4rem !important;
       }
     }
   }
 }
 
-.imgPreview {
+.preview {
+  width: 15rem;
+  height: 15rem;
+  margin: 2rem auto;
+  object-fit: cover;
   display: block;
-  width: 100%;
 }
 
 .btn {
+  width: 100% !important;
   font-size: 1.4rem !important;
 }

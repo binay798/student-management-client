@@ -8,8 +8,6 @@ import {
   getResults,
   deleteResult,
 } from '../../../../../store/actionCreators/index';
-import { Link } from 'react-router-dom';
-// import initializeState from '../../../../../utlis/initializeState';
 
 function Result(props) {
   // const [title, setTitle] = useState('');
@@ -33,6 +31,7 @@ function Result(props) {
         setGetResultsLoading
       )
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const submitHandler = (e, data) => {
