@@ -1,7 +1,6 @@
 import axios from './../../axios-instance/axiosInstance';
 import * as actionTypes from './../actions/index';
 
-
 export const getStudents = (setLoading) => {
   return async (dispatch) => {
     setLoading(true);
@@ -12,5 +11,16 @@ export const getStudents = (setLoading) => {
       console.log(err.message);
     }
     setLoading(false);
+  };
+};
+
+export const getTotalStudents = () => {
+  return async (dispatch) => {
+    try {
+      let res = await axios.get('/api/v1/users/count/student');
+      console.log(res);
+    } catch (err) {
+      console.log(err.message);
+    }
   };
 };

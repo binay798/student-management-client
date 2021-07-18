@@ -1,63 +1,77 @@
 .result {
-  display: flex;
-  gap: 3rem;
+  max-width: 70rem;
+  margin: 0 auto;
+  margin-bottom: 5rem;
 
-  &__left {
-    flex: 1;
-
-    h2 {
-      margin-bottom: 4rem;
-    }
-
-    ul {
-      display: flex;
-      flex-direction: column;
-      gap: 4rem;
-      li {
-        div {
-          img {
-            width: 100%;
-            display: block;
-          }
-        }
-      }
-    }
-
-    // head
-    &__head {
-      display: flex;
-      align-items: center;
-      gap: 4rem;
-      justify-content: space-between;
-      margin-bottom: 1rem;
-    }
+  &__create {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
   }
 
-  &__right {
-    flex: 1;
+  // heading
+  &__heading {
+    font-weight: 300;
+    display: block;
+  }
 
-    &__form {
+  &__container {
+    border: 1px solid lightgray;
+    // padding: 1rem;
+  }
+
+  &__tableHead {
+    display: flex;
+    justify-content: space-between;
+    background-color: rgb(223, 217, 217);
+    padding: 1rem;
+  }
+  &__tableBody {
+    &__item {
       display: flex;
-      flex-direction: column;
-      gap: 2rem;
-      &__inp {
-        width: 100% !important;
-        display: block !important;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+    }
+    &__img {
+      display: block;
+      width: 15rem;
+    }
+  }
+}
 
-        & > * {
-          font-size: 1.4rem !important;
-          width: 100% !important;
-        }
+.createResultModal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 1rem;
+  max-width: 40rem;
+  width: 100%;
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    &__inp {
+      width: 100%;
+      & > * {
+        font-size: 1.4rem !important;
       }
     }
   }
 }
 
-.imgPreview {
+.preview {
+  width: 15rem;
+  height: 15rem;
+  margin: 2rem auto;
+  object-fit: cover;
   display: block;
-  width: 100%;
 }
 
 .btn {
+  width: 100% !important;
   font-size: 1.4rem !important;
 }

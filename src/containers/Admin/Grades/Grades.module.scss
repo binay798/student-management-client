@@ -45,24 +45,21 @@
   }
 }
 
-.filter {
-  display: flex;
-  gap: 2rem;
-
-  &__option {
-    font-size: 1.4rem !important;
-    font-weight: 400 !important;
-    text-transform: none;
-    color: #666;
-    min-width: 13rem !important;
-  }
-}
-
 .tableCell {
   font-size: 1.8rem !important;
   color: #666 !important;
 }
 
-.menuItem {
-  font-size: 1.4rem !important;
+.inp {
+  & > * {
+    font-size: 1.4rem !important;
+  }
+}
+
+.refresh {
+  cursor: pointer;
+  transition: 0.3s;
+  &:hover {
+    transform: scale(1.2);
+  }
 }

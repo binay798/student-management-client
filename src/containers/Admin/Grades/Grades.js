@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import classes from './Grades.module.scss';
 import { Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
@@ -8,15 +8,30 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 import TableHead from '@material-ui/core/TableHead';
-import { Button, FormControl, InputLabel, Select } from '@material-ui/core';
+import { Button, TextField } from '@material-ui/core';
 import Icon from './../../../components/UI/Icon/Icon';
-import MenuItem from '@material-ui/core/MenuItem';
 import { Link, useHistory } from 'react-router-dom';
 import { Avatar, IconButton, CircularProgress } from '@material-ui/core';
 import { getAllGrades } from './../../../store/actionCreators/index';
 import { useDispatch, useSelector } from 'react-redux';
+import axios from '../../../axios-instance/axiosInstance';
 
 function Grades() {
+  const [batch, setBatch] = useState('');
+  const [filteredGrades, setFilteredGrades] = useState(null);
+
+  const getFilteredGrades = async (e) => {
+    e.preventDefault();
+    try {
+      if (batch === '') return;
+      let res = await axios.get(
+        `/api/v1/grade?batch=${batch}&populate=allStudents,classTeacher`
+      );
+      setFilteredGrades(res.data.grades);
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
   return (
     <Paper className={classes.grades}>
       <div className={classes.grades__top}>
@@ -40,11 +55,25 @@ function Grades() {
             <span>Filter options</span>
             <Icon name='filter' />
           </h3>
-          <Filter />
+          <form onSubmit={getFilteredGrades}>
+            <TextField
+              label='Batch'
+              variant='outlined'
+              type='number'
+              className={classes.inp}
+              value={batch}
+              onChange={(e) => setBatch(e.target.value)}
+            />
+          </form>
+          <Icon
+            name='refresh'
+            onClick={() => setFilteredGrades(null)}
+            className={classes.refresh}
+          />
         </div>
       </div>
 
-      <StickyHeadTable />
+      <StickyHeadTable filteredGrades={filteredGrades} />
     </Paper>
   );
 }
@@ -58,15 +87,29 @@ const useStyles = makeStyles({
   },
 });
 
-function StickyHeadTable() {
+function Progress(props) {
+  const progressStyle = {
+    display: props.loading ? 'flex' : 'none',
+    padding: '4rem',
+    justifyContent: 'center',
+    alignItems: 'center',
+  };
+  return (
+    <div style={progressStyle}>
+      <CircularProgress />
+    </div>
+  );
+}
+
+function StickyHeadTable(props) {
   const classes = useStyles();
   const history = useHistory();
   const dispatch = useDispatch();
   const globalState = useSelector((state) => state.grade);
+  // const [filteredGrades, setFilteredGrades] = useState(null);
 
   useEffect(() => {
     if (globalState.allGrades) return;
-    console.log('passes through');
     dispatch(getAllGrades());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -120,12 +163,47 @@ function StickyHeadTable() {
               </TableCell>
             </TableRow>
           </TableHead>
-          {/* circular progress */}
-          <CircularProgress
-            style={{ display: !globalState.allGrades ? 'block' : 'none' }}
-          />
+
           <TableBody>
-            {globalState.allGrades &&
+            {/* Grades after filter */}
+            {props.filteredGrades &&
+              props.filteredGrades.map((row, id) => {
+                return (
+                  <TableRow key={id} hover role='checkbox' tabIndex={-1}>
+                    <TableCell style={{ fontSize: '1.6rem' }} align='left'>
+                      {row.classTeacher.firstname} {row.classTeacher.lastname}
+                    </TableCell>
+                    <TableCell style={{ fontSize: '1.6rem' }} align='right'>
+                      <Avatar
+                        alt='Cindy Baker'
+                        src={row.classTeacher.profilePic}
+                        style={{ marginLeft: 'auto' }}
+                      />
+                    </TableCell>
+                    <TableCell style={{ fontSize: '1.6rem' }} align='right'>
+                      {row.name}
+                    </TableCell>
+                    <TableCell style={{ fontSize: '1.6rem' }} align='right'>
+                      {row.classTeacher.mobile || 'n/a'}
+                    </TableCell>
+                    <TableCell style={{ fontSize: '1.6rem' }} align='right'>
+                      {new Date(row.batch).getFullYear() || 'n/a'}
+                    </TableCell>
+                    <TableCell style={{ fontSize: '1.6rem' }} align='right'>
+                      <IconButton onClick={() => changeRoute(row)}>
+                        <Icon name='eye' style={{ fill: '#444' }} />
+                      </IconButton>
+
+                      <IconButton>
+                        <Icon name='edit' style={{ fill: '#3f51b5' }} />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            {/* if grades are not filtered */}
+            {!props.filteredGrades &&
+              globalState.allGrades &&
               globalState.allGrades.map((row, id) => {
                 return (
                   <TableRow key={id} hover role='checkbox' tabIndex={-1}>
@@ -163,52 +241,13 @@ function StickyHeadTable() {
           </TableBody>
         </Table>
       </TableContainer>
+      {/* circular progress */}
+      {/* <CircularProgress
+        style={{ display: !globalState.allGrades ? 'block' : 'none' }}
+      /> */}
+      <Progress loading={!globalState.allGrades} />
     </Paper>
   );
 }
 
-function Filter() {
-  const allBatch = [2014, 2015, 2016, 2017, 2018, 2019, 2020];
-  return (
-    <div className={classes.filter}>
-      <FilterOptions name='Batch' options={allBatch} />
-    </div>
-  );
-}
-
-function FilterOptions(props) {
-  const [age, setAge] = React.useState('');
-  return (
-    <div>
-      <FormControl variant='outlined' className={classes.filter__option}>
-        <InputLabel
-          style={{ fontSize: '1.4rem' }}
-          id='demo-simple-select-outlined-label'
-        >
-          {props.name}
-        </InputLabel>
-        <Select
-          labelId='demo-simple-select-outlined-label'
-          id='demo-simple-select-outlined'
-          value={age}
-          onChange={(e) => setAge(e.target.value)}
-          label={props.name}
-        >
-          <MenuItem value='' style={{ fontSize: '1.4rem' }}>
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value={10} style={{ fontSize: '1.4rem' }}>
-            Ten
-          </MenuItem>
-          <MenuItem value={20} style={{ fontSize: '1.4rem' }}>
-            Twenty
-          </MenuItem>
-          <MenuItem value={30} style={{ fontSize: '1.4rem' }}>
-            Thirty
-          </MenuItem>
-        </Select>
-      </FormControl>
-    </div>
-  );
-}
 export default Grades;

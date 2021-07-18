@@ -92,17 +92,6 @@ function EditUserModal(props) {
   const [mobile, setMobile] = useState(props.mobile || '');
   const [imgUrl, setImgUrl] = useState(props.profilePic || '');
 
-  // // initialize data
-  // useEffect(() => {
-  //   setFirstname(props.firstname || '');
-  //   setLastname(props.lastname || '');
-  //   setEmail(props.email || '');
-  //   setGrade(props.grade || '');
-  //   setBatch(new Date(props.batch).getFullYear() || '');
-  //   setMobile(props.mobile || '');
-  //   setGender(props.gender || '');
-  // }, []);
-
   const submitHandler = (e) => {
     e.preventDefault();
     props.updateUser(

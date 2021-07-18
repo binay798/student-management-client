@@ -134,8 +134,7 @@ function StickyHeadTable() {
               </TableCell>
             </TableRow>
           </TableHead>
-          {/* loading */}
-          <Progress loading={loading} />
+
           <TableBody>
             {globalState.teachers &&
               globalState.teachers.map((row, id) => {
@@ -177,6 +176,8 @@ function StickyHeadTable() {
           </TableBody>
         </Table>
       </TableContainer>
+      {/* loading */}
+      <Progress loading={loading} />
     </Paper>
   );
 }

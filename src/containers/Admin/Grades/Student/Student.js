@@ -12,6 +12,7 @@ import {
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-dom';
 import Result from './Result/Result';
+import Payments from './Payments/Payments';
 
 function Student() {
   const globalState = useSelector((state) => state.grade.selectedStudent);
@@ -116,6 +117,12 @@ function Student() {
 
       {/* Results section */}
       <Result
+        studentId={globalState.student._id}
+        batch={globalState.batch}
+        grade={globalState.grade}
+      />
+
+      <Payments
         studentId={globalState.student._id}
         batch={globalState.batch}
         grade={globalState.grade}

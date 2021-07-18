@@ -30,6 +30,8 @@ function Progress(props) {
   );
 }
 function Dashboard(props) {
+  // Get total number of students
+  useEffect(() => {}, []);
   return (
     <div className={classes.dashboard}>
       <div className={classes.dashboard__top}>
@@ -94,7 +96,7 @@ const TopStudentsTable = (props) => {
     props.history.push(`/admin/user/${user._id}`);
   };
   return (
-    <div className={classes.topStudents}>
+    <Paper className={classes.topStudents}>
       <TableContainer component={Paper} className={styles.container}>
         <Table stickyHeader aria-label='sticky table'>
           <TableHead>
@@ -106,8 +108,7 @@ const TopStudentsTable = (props) => {
               <TableCell align='right'>Action</TableCell>
             </TableRow>
           </TableHead>
-          {/* loading */}
-          <Progress loading={loading} />
+
           <TableBody>
             {globalState.students &&
               globalState.students.map((row) => (
@@ -150,7 +151,9 @@ const TopStudentsTable = (props) => {
           </TableBody>
         </Table>
       </TableContainer>
-    </div>
+      {/* loading */}
+      <Progress loading={loading} />
+    </Paper>
   );
 };
 
@@ -175,7 +178,7 @@ const TeachersTable = (props) => {
 
   // return all the teachers
   return (
-    <div className={classes.topStudents}>
+    <Paper className={classes.topStudents}>
       <TableContainer component={Paper} className={styles.container}>
         <Table stickyHeader aria-label='sticky table'>
           <TableHead>
@@ -186,8 +189,7 @@ const TeachersTable = (props) => {
               <TableCell align='right'>Action</TableCell>
             </TableRow>
           </TableHead>
-          {/* loading */}
-          <Progress loading={loading} />
+
           <TableBody>
             {globalState.teachers &&
               globalState.teachers.map((row) => (
@@ -233,7 +235,9 @@ const TeachersTable = (props) => {
           </TableBody>
         </Table>
       </TableContainer>
-    </div>
+      {/* loading */}
+      <Progress loading={loading} />
+    </Paper>
   );
 };
 

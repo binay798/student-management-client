@@ -6,7 +6,6 @@ import Icon from './../UI/Icon/Icon';
 import { imgUrl } from './../../containers/Admin/Admin';
 
 function TableData(props) {
-  console.log(props);
   return (
     <React.Fragment>
       <TableCell className={classes.table} align='left'>

@@ -29,7 +29,11 @@ function Grade() {
   }, []);
 
   if (loading || !globalState.selectedGrade) {
-    return <CircularProgress />;
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <CircularProgress />
+      </div>
+    );
   }
   return (
     <Paper className={classes.grade}>
