@@ -11,6 +11,11 @@ const reducer = (state = initialState, action) => {
         ...state,
         selectedUser: action.payload,
       };
+    case actionTypes.UPDATE_SELECTED_USER:
+      return {
+        ...state,
+        selectedUser: action.payload,
+      };
     default:
       return state;
   }

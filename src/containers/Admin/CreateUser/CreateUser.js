@@ -19,6 +19,7 @@ import {
 import Icon from './../../../components/UI/Icon/Icon';
 import { createUser } from './../../../store/actionCreators/index';
 import { useDispatch } from 'react-redux';
+import initializeState from '../../../utlis/initializeState';
 
 function CreateUser() {
   const [age, setAge] = useState('');
@@ -84,6 +85,21 @@ function CreateUser() {
     } else {
       setError('Please type the fields properly');
     }
+    initializeState([
+      setFirstname,
+      setLastname,
+      setMiddlename,
+      setEmail,
+      setPassword,
+      setConfirmPassword,
+      setAge,
+      setRole,
+      setMobile,
+      setGender,
+      setGrade,
+      setBatch,
+      setImgUrl,
+    ]);
   };
 
   return (

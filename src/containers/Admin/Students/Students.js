@@ -9,16 +9,12 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 import TableHead from '@material-ui/core/TableHead';
 import TextField from '@material-ui/core/TextField';
-import { Button, FormControl, InputLabel, Select } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import Icon from './../../../components/UI/Icon/Icon';
-import MenuItem from '@material-ui/core/MenuItem';
 import TableData from '../../../components/TableData/TableData';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  getStudents,
-  selectUser as SelectUser,
-} from './../../../store/actionCreators/index';
-import { useHistory } from 'react-router-dom';
+import { getStudents } from './../../../store/actionCreators/index';
+import { useHistory, Link } from 'react-router-dom';
 import axios from '../../../axios-instance/axiosInstance';
 
 const useStyles = makeStyles({
@@ -94,25 +90,21 @@ function Students() {
           </Button>
         </form>
         <div className={classes.students__create}>
-          <h3>
-            <span>Filter options</span>
-            <Icon name='filter' />
-          </h3>
-          <Button
-            startIcon={
-              <Icon name='plus' style={{ fill: 'white', width: '1.5rem' }} />
-            }
-            variant='contained'
-            color='secondary'
-          >
-            Create new user
-          </Button>
+          <Link to='/admin/createUser'>
+            <Button
+              startIcon={
+                <Icon name='plus' style={{ fill: 'white', width: '1.5rem' }} />
+              }
+              variant='contained'
+              color='secondary'
+            >
+              Create new user
+            </Button>
+          </Link>
         </div>
-
-        <Filter />
       </div>
 
-      <StickyHeadTable searchedStudents={searchedStudents} />
+      <MemoizedStickyTable searchedStudents={searchedStudents} />
     </Paper>
   );
 }
@@ -134,6 +126,7 @@ function StickyHeadTable(props) {
   const selectUser = (user) => {
     history.push(`/admin/user/${user._id}`);
   };
+  console.log('sticky');
 
   return (
     <Paper className={classes.root}>
@@ -216,50 +209,6 @@ function StickyHeadTable(props) {
   );
 }
 
-function Filter() {
-  const allBatch = [2014, 2015, 2016, 2017, 2018, 2019, 2020];
-  const allGrade = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-  return (
-    <div className={classes.filter}>
-      <FilterOptions name='Batch' options={allBatch} />
-      <FilterOptions name='Grade' options={allGrade} />
-    </div>
-  );
-}
+const MemoizedStickyTable = React.memo(StickyHeadTable);
 
-function FilterOptions(props) {
-  const [age, setAge] = React.useState('');
-  return (
-    <div>
-      <FormControl variant='outlined' className={classes.filter__option}>
-        <InputLabel
-          style={{ fontSize: '1.4rem' }}
-          id='demo-simple-select-outlined-label'
-        >
-          {props.name}
-        </InputLabel>
-        <Select
-          labelId='demo-simple-select-outlined-label'
-          id='demo-simple-select-outlined'
-          value={age}
-          onChange={(e) => setAge(e.target.value)}
-          label={props.name}
-        >
-          <MenuItem value='' style={{ fontSize: '1.4rem' }}>
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value={10} style={{ fontSize: '1.4rem' }}>
-            Ten
-          </MenuItem>
-          <MenuItem value={20} style={{ fontSize: '1.4rem' }}>
-            Twenty
-          </MenuItem>
-          <MenuItem value={30} style={{ fontSize: '1.4rem' }}>
-            Thirty
-          </MenuItem>
-        </Select>
-      </FormControl>
-    </div>
-  );
-}
 export default Students;

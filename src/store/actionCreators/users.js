@@ -20,23 +20,25 @@ export const getUser = (id, setLoading) => {
   };
 };
 
-export const updateUser = (data, id) => {
+export const updateUser = (data, id, setLoading) => {
   return async (dispatch) => {
+    setLoading(true);
     try {
       let res = await axios.patch(`/api/v1/users/update-user/${id}`, data);
       // console.log(res);
       if (res) {
         const user = res.data.user;
         if (user.role === 'student') {
-          dispatch({ type: actionTypes.UPDATE_STUDENT, payload: user });
+          dispatch({ type: actionTypes.UPDATE_SELECTED_USER, payload: user });
         } else if (user.role === 'teacher') {
-          dispatch({ type: actionTypes.UPDATE_TEACHER, payload: user });
+          dispatch({ type: actionTypes.UPDATE_SELECTED_USER, payload: user });
         }
         dispatch({ type: actionTypes.SELECT_USER, payload: user });
       }
     } catch (err) {
       console.log(err.message);
     }
+    setLoading(false);
   };
 };
 

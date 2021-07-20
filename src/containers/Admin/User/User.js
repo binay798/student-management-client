@@ -48,6 +48,7 @@ function User(props) {
         open={showEditModal}
         {...props.user.selectedUser}
         onClose={() => setShowEditModal(false)}
+        userId={userId}
         updateUser={props.updateUser}
       />
       <div className={classes.user__container}>
@@ -114,9 +115,11 @@ function EditUserModal(props) {
   const [batch, setBatch] = useState(new Date(props.batch).getFullYear() || '');
   const [mobile, setMobile] = useState(props.mobile || '');
   const [imgUrl, setImgUrl] = useState(props.profilePic || '');
+  const [loading, setLoading] = useState(false);
 
   const submitHandler = (e) => {
     e.preventDefault();
+
     props.updateUser(
       {
         firstname,
@@ -128,7 +131,8 @@ function EditUserModal(props) {
         mobile,
         profilePic: imgUrl,
       },
-      props._id
+      props.userId,
+      setLoading
     );
   };
 
@@ -245,8 +249,9 @@ function EditUserModal(props) {
             color='primary'
             type='submit'
             className={classes.btn}
+            disabled={loading}
           >
-            Edit
+            {loading ? 'Updating...' : 'Edit'}
           </Button>
         </form>
       </Paper>
@@ -262,7 +267,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    updateUser: (data, id) => dispatch(updateUser(data, id)),
+    updateUser: (data, id, setLoading) =>
+      dispatch(updateUser(data, id, setLoading)),
   };
 };
 

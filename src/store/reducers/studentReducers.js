@@ -14,6 +14,7 @@ const reducers = (state = initialState, action) => {
       };
     case UPDATE_STUDENT:
       let newStudentArr = produce(state.students, (draft) => {
+        if (!draft) return;
         const index = draft.findIndex(
           (item) => item._id === action.payload._id
         );
