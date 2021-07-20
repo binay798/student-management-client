@@ -15,7 +15,13 @@ function Payment(props) {
 
   // get payments
   useEffect(() => {
-    dispatch(getStudentPayments(props.studentId));
+    dispatch(
+      getStudentPayments({
+        id: props.studentId,
+        batch: props.batch,
+        grade: props.grade,
+      })
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

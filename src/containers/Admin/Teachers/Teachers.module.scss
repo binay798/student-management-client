@@ -77,3 +77,11 @@
   font-size: 1.4rem !important;
   padding: 0.8rem 1.6rem !important;
 }
+
+.refresh {
+  cursor: pointer;
+  transition: 0.3s;
+  &:hover {
+    transform: scale(1.2);
+  }
+}

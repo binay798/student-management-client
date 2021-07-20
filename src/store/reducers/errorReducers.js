@@ -1,19 +1,23 @@
-import * as actionTypes from './../actions/index';
 const initialState = {
-  user: null,
-  selectedUser: null,
+  errorMessage: null,
+  open: false,
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case actionTypes.SELECT_USER:
+    case 'ERROR':
       return {
         ...state,
-        selectedUser: action.payload,
+        errorMessage: action.payload,
+        open: true,
+      };
+    case 'RESET_ERROR':
+      return {
+        errorMessage: null,
+        open: false,
       };
     default:
       return state;
   }
 };
-
 export default reducer;

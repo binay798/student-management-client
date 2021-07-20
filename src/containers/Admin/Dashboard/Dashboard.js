@@ -15,6 +15,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { selectUser as SelectUser } from './../../../store/actionCreators/index';
 import { CircularProgress } from '@material-ui/core';
+import axios from './../../../axios-instance/axiosInstance';
 
 function Progress(props) {
   const progressStyle = {
@@ -31,7 +32,17 @@ function Progress(props) {
 }
 function Dashboard(props) {
   // Get total number of students
-  useEffect(() => {}, []);
+  const [total, setTotal] = useState('');
+  useEffect(() => {
+    (async () => {
+      try {
+        let res = await axios.get('/api/v1/users/count');
+        setTotal(res.data);
+      } catch (err) {
+        console.log(err.message);
+      }
+    })();
+  }, []);
   return (
     <div className={classes.dashboard}>
       <div className={classes.dashboard__top}>
@@ -39,14 +50,14 @@ function Dashboard(props) {
           <Icon name='students' />
           <div>
             <h2>Total students</h2>
-            <h3>8550</h3>
+            <h3>{total.student || '...'}</h3>
           </div>
         </Paper>
         <Paper className={classes.dashboard__top__item}>
           <Icon name='teachers' />
           <div>
             <h2>Total teachers</h2>
-            <h3>150</h3>
+            <h3>{total.teacher || '...'}</h3>
           </div>
         </Paper>
         <Paper className={classes.dashboard__top__item}>

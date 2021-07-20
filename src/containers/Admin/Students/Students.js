@@ -19,6 +19,7 @@ import {
   selectUser as SelectUser,
 } from './../../../store/actionCreators/index';
 import { useHistory } from 'react-router-dom';
+import axios from '../../../axios-instance/axiosInstance';
 
 const useStyles = makeStyles({
   root: {
@@ -44,17 +45,41 @@ function Progress(props) {
 }
 
 function Students() {
+  const [name, setName] = useState('');
+  const [searchedStudents, setSearchedStudents] = useState(null);
+  const [searchStudentLoading, setSearchStudentLoading] = useState(false);
+
+  // search student based on name
+  const searchStudent = async (e) => {
+    e.preventDefault();
+    setSearchStudentLoading(true);
+    try {
+      if (name === '') throw new Error('Enter valid name');
+      let res = await axios.get('/api/v1/users/searchUser/student/' + name);
+      setSearchedStudents(res.data.users);
+    } catch (err) {
+      console.log(err.message);
+    }
+    setSearchStudentLoading(false);
+    setName('');
+  };
   return (
     <Paper className={classes.students}>
       <div className={classes.students__top}>
-        <form className={classes.students__search}>
+        <form onSubmit={searchStudent} className={classes.students__search}>
           <h2 className={classes.students__head}>List of all students</h2>
-
+          <Icon
+            name='refresh'
+            onClick={() => setSearchedStudents(null)}
+            className={classes.refresh}
+          />
           <TextField
             id='outlined-basic'
             className={classes.students__search__inp}
             label='Students...'
             variant='outlined'
+            value={name}
+            onChange={(e) => setName(e.target.value)}
           />
           <Button
             startIcon={
@@ -62,8 +87,10 @@ function Students() {
             }
             variant='contained'
             color='primary'
+            disabled={searchStudentLoading}
+            type='submit'
           >
-            Search
+            {searchStudentLoading ? 'Searching...' : 'Search'}
           </Button>
         </form>
         <div className={classes.students__create}>
@@ -85,12 +112,12 @@ function Students() {
         <Filter />
       </div>
 
-      <StickyHeadTable />
+      <StickyHeadTable searchedStudents={searchedStudents} />
     </Paper>
   );
 }
 
-function StickyHeadTable() {
+function StickyHeadTable(props) {
   const [loading, setLoading] = useState(false);
   const globalState = useSelector((state) => state.students);
   const dispatch = useDispatch();
@@ -105,7 +132,6 @@ function StickyHeadTable() {
 
   // change route to user with selected user
   const selectUser = (user) => {
-    dispatch(SelectUser(user));
     history.push(`/admin/user/${user._id}`);
   };
 
@@ -155,7 +181,25 @@ function StickyHeadTable() {
           </TableHead>
 
           <TableBody>
-            {globalState.students &&
+            {/* if empty student then */}
+            {props.searchedStudents && props.searchedStudents.length === 0 ? (
+              <TableRow>
+                <TableCell>No student found</TableCell>
+              </TableRow>
+            ) : null}
+            {/* if there is searched student */}
+            {props.searchedStudents &&
+              props.searchedStudents.length !== 0 &&
+              props.searchedStudents.map((item, id) => {
+                return (
+                  <TableRow key={id} hover role='checkbox' tabIndex={-1}>
+                    <TableData {...item} selectUser={selectUser} type='user' />
+                  </TableRow>
+                );
+              })}
+            {/* Default list of students */}
+            {!props.searchedStudents &&
+              globalState.students &&
               globalState.students.map((row, id) => {
                 return (
                   <TableRow key={id} hover role='checkbox' tabIndex={-1}>

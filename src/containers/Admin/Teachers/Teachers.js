@@ -14,6 +14,7 @@ import Icon from './../../../components/UI/Icon/Icon';
 import { useHistory } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux';
 import { imgUrl } from '../Admin';
+import axios from './../../../axios-instance/axiosInstance';
 
 import {
   getAllTeachers,
@@ -34,17 +35,41 @@ function Progress(props) {
   );
 }
 function Teachers() {
+  const [name, setName] = useState('');
+  const [searchTeacherLoading, setSearchTeacherLoading] = useState(false);
+  const [searchedTeachers, setSearchedTeachers] = useState([]);
+
+  // search teacher
+  const searchTeacher = async (e) => {
+    e.preventDefault();
+    setSearchTeacherLoading(true);
+    try {
+      if (name === '') throw new Error('Enter valid name');
+      let res = await axios.get('/api/v1/users/searchUser/teacher/' + name);
+      setSearchedTeachers(res.data.users);
+    } catch (err) {
+      console.log(err.message);
+    }
+    setSearchTeacherLoading(false);
+    setName('');
+  };
   return (
     <Paper className={classes.teachers}>
       <div className={classes.teachers__top}>
-        <form className={classes.teachers__search}>
+        <form onSubmit={searchTeacher} className={classes.teachers__search}>
           <h2 className={classes.teachers__head}>List of all teachers</h2>
-
+          <Icon
+            name='refresh'
+            onClick={() => setSearchedTeachers([])}
+            className={classes.refresh}
+          />
           <TextField
             id='outlined-basic'
             className={classes.teachers__search__inp}
             label='Teachers...'
             variant='outlined'
+            value={name}
+            onChange={(e) => setName(e.target.value)}
           />
           <Button
             startIcon={
@@ -52,13 +77,15 @@ function Teachers() {
             }
             variant='contained'
             color='primary'
+            type='submit'
+            disabled={searchTeacherLoading}
           >
-            Search
+            {searchTeacherLoading ? 'Searching...' : 'Search'}
           </Button>
         </form>
       </div>
 
-      <StickyHeadTable />
+      <MemoizedStickyTable searchedTeachers={searchedTeachers} />
     </Paper>
   );
 }
@@ -72,7 +99,7 @@ const useStyles = makeStyles({
   },
 });
 
-function StickyHeadTable() {
+function StickyHeadTable(props) {
   const [loading, setLoading] = useState(false);
   const globalState = useSelector((state) => state.teachers);
   const dispatch = useDispatch();
@@ -86,7 +113,6 @@ function StickyHeadTable() {
   }, [dispatch, globalState]);
   // change route to user with selected user
   const selectUser = (user) => {
-    dispatch(SelectUser(user));
     history.push(`/admin/user/${user._id}`);
   };
 
@@ -136,7 +162,46 @@ function StickyHeadTable() {
           </TableHead>
 
           <TableBody>
-            {globalState.teachers &&
+            {/* searched teachers */}
+            {props.searchedTeachers.length !== 0 &&
+              props.searchedTeachers.map((row, id) => {
+                return (
+                  <TableRow key={id} hover role='checkbox' tabIndex={-1}>
+                    <TableCell style={{ fontSize: '1.4rem' }} align='left'>
+                      {`${row.firstname} ${row.lastname}`}
+                    </TableCell>
+                    <TableCell style={{ fontSize: '1.4rem' }} align='right'>
+                      <Avatar
+                        alt='Cindy Baker'
+                        src={row.profilePic || imgUrl}
+                        style={{ marginLeft: 'auto' }}
+                      />
+                    </TableCell>
+                    {/* <TableCell style={{fontSize: '1.4re''}} align='right'>
+                    {row.grade}
+                  </TableCell> */}
+                    <TableCell style={{ fontSize: '1.4rem' }} align='right'>
+                      {row.mobile || 'n/a'}
+                    </TableCell>
+                    <TableCell style={{ fontSize: '1.4rem' }} align='right'>
+                      {new Date(row.batch).getFullYear() || 'n/a'}
+                    </TableCell>
+                    <TableCell style={{ fontSize: '1.4rem' }} align='right'>
+                      <div>
+                        <IconButton onClick={() => selectUser(row)}>
+                          <Icon name='eye' style={{ fill: '#444' }} />
+                        </IconButton>
+
+                        <IconButton>
+                          <Icon name='edit' style={{ fill: '#3f51b5' }} />
+                        </IconButton>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            {props.searchedTeachers.length === 0 &&
+              globalState.teachers &&
               globalState.teachers.map((row, id) => {
                 return (
                   <TableRow key={id} hover role='checkbox' tabIndex={-1}>
@@ -181,5 +246,7 @@ function StickyHeadTable() {
     </Paper>
   );
 }
+
+const MemoizedStickyTable = React.memo(StickyHeadTable);
 
 export default Teachers;

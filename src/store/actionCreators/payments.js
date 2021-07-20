@@ -15,13 +15,22 @@ export const createPayment = (data, setLoading) => {
   };
 };
 
-export const getStudentPayments = (id) => {
+export const getStudentPayments = (data) => {
   return async (dispatch) => {
     try {
-      let res = await axios.get(`/api/v1/users/payment/${id}`);
+      let res = await axios.get(
+        `/api/v1/users/payment/${data.id}/${data.batch}/${data.grade}`
+      );
+
+      if (!res.data.payments) {
+        return dispatch({
+          type: GET_STUDENT_PAYMENTS,
+          payload: [],
+        });
+      }
       dispatch({
         type: GET_STUDENT_PAYMENTS,
-        payload: res.data.payments.allPayments,
+        payload: res.data.payments,
       });
     } catch (err) {
       console.log(err.message);

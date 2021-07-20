@@ -40,7 +40,6 @@ function CreateUser() {
   const [batch, setBatch] = useState('');
 
   const dispatch = useDispatch();
-  console.log(error);
 
   const submitHandler = (e) => {
     e.preventDefault();
@@ -92,6 +91,7 @@ function CreateUser() {
       <h2 className={classes.user__head}>Create new user</h2>
       <div className={classes.user__container}>
         <form onSubmit={submitHandler} className={classes.user__form}>
+          {error}
           <div className={classes.user__form__top}>
             <TextField
               label='Firstname'

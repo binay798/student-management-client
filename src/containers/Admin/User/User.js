@@ -1,21 +1,44 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Paper } from '@material-ui/core';
 import React from 'react';
 import classes from './User.module.scss';
 import { imgUrl } from './../Admin';
-import { Button, Modal, TextField } from '@material-ui/core';
+import { Button, Modal, TextField, CircularProgress } from '@material-ui/core';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import { updateUser } from './../../../store/actionCreators/index';
-import { connect } from 'react-redux';
+import { updateUser, getUser } from './../../../store/actionCreators/index';
+import { connect, useDispatch } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 
+function Progress(props) {
+  const progressStyle = {
+    display: props.loading ? 'flex' : 'none',
+    padding: '4rem',
+    justifyContent: 'center',
+    alignItems: 'center',
+  };
+  return (
+    <div style={progressStyle}>
+      <CircularProgress />
+    </div>
+  );
+}
 function User(props) {
+  const dispatch = useDispatch();
   const [showEditModal, setShowEditModal] = useState(false);
+  const location = useLocation();
+  const userId = location.pathname.split('/')[3];
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    // get selected user
+    dispatch(getUser(userId, setLoading));
+  }, []);
 
   if (!props.user.selectedUser) {
-    return <div>No user selected</div>;
+    return <Progress loading={loading} />;
   }
 
   return (

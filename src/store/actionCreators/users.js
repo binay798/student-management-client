@@ -5,6 +5,21 @@ export const selectUser = (user) => {
   return { type: actionTypes.SELECT_USER, payload: user };
 };
 
+export const getUser = (id, setLoading) => {
+  return async (dispatch) => {
+    setLoading(true);
+    try {
+      dispatch({ type: actionTypes.SELECT_USER, payload: null });
+
+      let res = await axios.get(`/api/v1/users?_id=${id}`);
+      dispatch({ type: actionTypes.SELECT_USER, payload: res.data.users[0] });
+    } catch (err) {
+      console.log(err);
+    }
+    setLoading(false);
+  };
+};
+
 export const updateUser = (data, id) => {
   return async (dispatch) => {
     try {
