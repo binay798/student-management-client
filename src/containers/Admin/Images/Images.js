@@ -9,6 +9,7 @@ import {
   getImages,
   deleteImage,
 } from './../../../store/actionCreators/index';
+import { motion } from 'framer-motion';
 
 function Progress(props) {
   const progressStyle = {
@@ -23,6 +24,28 @@ function Progress(props) {
     </div>
   );
 }
+
+const mainVariant = {
+  hidden: {
+    opacity: 0,
+  },
+  visible: {
+    opacity: 1,
+    transition: {
+      when: 'beforeChildren',
+      staggerChildren: 0.2,
+    },
+  },
+};
+const imgVariant = {
+  hidden: {
+    opacity: 0,
+  },
+  visible: {
+    opacity: 1,
+  },
+};
+
 function Images() {
   const globalState = useSelector((state) => state.image);
   const dispatch = useDispatch();
@@ -107,21 +130,28 @@ function Images() {
           <Progress loading={initialLoading} />
           {/* images container */}
 
-          <div className={classes.images__main}>
+          <motion.div
+            variants={mainVariant}
+            initial='hidden'
+            animate='visible'
+            className={classes.images__main}
+          >
             {globalState.images &&
               globalState.images.map((item) => {
                 return (
-                  <ImageContent
-                    key={item._id}
-                    copiedImgId={copied}
-                    copied={() => copyUrl(item._id, item.imageUrl)}
-                    deleteImage={() => deleteImageById(item._id)}
-                    loading={deleteImageLoading}
-                    {...item}
-                  />
+                  <motion.div variants={imgVariant}>
+                    <ImageContent
+                      key={item._id}
+                      copiedImgId={copied}
+                      copied={() => copyUrl(item._id, item.imageUrl)}
+                      deleteImage={() => deleteImageById(item._id)}
+                      loading={deleteImageLoading}
+                      {...item}
+                    />
+                  </motion.div>
                 );
               })}
-          </div>
+          </motion.div>
         </Paper>
 
         <Paper className={classes.images__container__right}>

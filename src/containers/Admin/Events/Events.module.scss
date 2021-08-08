@@ -28,13 +28,12 @@
 
   &__form {
     &__inp {
-      display: block !important;
-      width: 100% !important;
-      margin-bottom: 2rem !important;
+      display: block;
+      width: 100%;
+      margin-bottom: 2rem;
 
       & > * {
-        font-size: 1.6rem !important;
-        width: 100% !important;
+        width: 100%;
       }
     }
   }
@@ -56,8 +55,7 @@
     }
 
     &__btn {
-      font-size: 1.6rem !important;
-      text-transform: none !important;
+      text-transform: none;
     }
   }
 }

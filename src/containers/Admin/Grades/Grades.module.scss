@@ -1,7 +1,7 @@
 .grades {
   padding: 1rem;
   min-height: 83vh;
-  color: #666 !important;
+  color: #666;
 
   &__top {
     margin-bottom: 3rem;
@@ -21,8 +21,7 @@
     gap: 3rem;
 
     button {
-      font-size: 1.6rem !important;
-      text-transform: none !important;
+      text-transform: none;
     }
   }
 
@@ -39,21 +38,17 @@
     justify-content: space-between;
 
     button {
-      font-size: 1.6rem;
       text-transform: none;
     }
   }
 }
 
 .tableCell {
-  font-size: 1.8rem !important;
-  color: #666 !important;
+  font-size: 1.8rem;
+  color: #666;
 }
 
 .inp {
-  & > * {
-    font-size: 1.4rem !important;
-  }
 }
 
 .refresh {

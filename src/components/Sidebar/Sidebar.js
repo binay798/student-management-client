@@ -60,14 +60,7 @@ function Sidebar() {
           <Icon name='events' />
           <span>Events</span>
         </NavLink>
-        <NavLink
-          to='/admin/payments'
-          className={classes.sidebar__item}
-          activeClassName={classes.active}
-        >
-          <Icon name='payments' />
-          <span>Payments</span>
-        </NavLink>
+
         <NavLink
           to='/admin/grades'
           className={classes.sidebar__item}

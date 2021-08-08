@@ -1,15 +1,41 @@
 import React, { useState } from 'react';
 import classes from './Login.module.scss';
 import { Paper, Tabs, Tab, TextField, Button } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from './../../../store/actionCreators/index';
 
 function Login() {
+  const dispatch = useDispatch();
+  const globalState = useSelector((state) => state.user);
+  const history = useHistory();
   const [value, setValue] = useState(0);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
+
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  // submit form
+  const submitHandler = (e) => {
+    e.preventDefault();
+    let role;
+    if (email === '' && password === '') return;
+    if (value === 0) {
+      // student login
+      role = 'student';
+    } else if (value === 1) {
+      // teacher login
+      role = 'teacher';
+    } else {
+      // admin login
+      role = 'admin';
+    }
+    dispatch(login({ email, password, role }, setLoading, history));
+  };
+
   return (
     <Paper className={classes.login}>
       <Tabs
@@ -22,7 +48,7 @@ function Login() {
         <Tab label='Login as admin' className={classes.login__tab} />
       </Tabs>
 
-      <form className={classes.login__form}>
+      <form onSubmit={submitHandler} className={classes.login__form}>
         <TextField
           className={classes.login__form__inp}
           label='Email'
@@ -43,11 +69,26 @@ function Login() {
           variant='contained'
           className={classes.login__form__btn}
           color='primary'
+          type='submit'
+          disabled={loading}
         >
-          Submit
+          {loading ? 'Please wait...' : 'Submit'}
         </Button>
       </form>
-      <Link to='/admin'>forgot password?</Link>
+      <Link to='/auth/forgotPassword'>forgot password?</Link>
+      {globalState.user && (
+        <div>
+          <Link to={`/${globalState.user.role}`}>
+            <Button
+              style={{ fontSize: '1.4rem' }}
+              variant='contained'
+              color='secondary'
+            >
+              Go to dashboard
+            </Button>
+          </Link>
+        </div>
+      )}
     </Paper>
   );
 }

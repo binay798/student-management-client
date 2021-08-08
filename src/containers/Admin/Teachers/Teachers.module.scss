@@ -1,7 +1,7 @@
 .teachers {
   padding: 1rem;
   min-height: 83vh;
-  color: #666 !important;
+  color: #666;
 
   &__top {
     margin-bottom: 3rem;
@@ -21,8 +21,8 @@
     align-items: center;
 
     button {
-      font-size: 1.6rem !important;
-      text-transform: none !important;
+      font-size: 1.6rem;
+      text-transform: none;
     }
   }
 
@@ -38,14 +38,10 @@
     margin-bottom: 2rem;
 
     &__inp {
-      margin-left: auto !important;
-    }
-    &__inp > * {
-      font-size: 1.6rem !important;
+      margin-left: auto;
     }
 
     button {
-      font-size: 1.6rem;
       text-transform: none;
     }
   }
@@ -56,26 +52,26 @@
   gap: 2rem;
 
   &__option {
-    font-size: 1.4rem !important;
-    font-weight: 400 !important;
+    font-size: 1.4rem;
+    font-weight: 400;
     text-transform: none;
     color: #666;
-    min-width: 13rem !important;
+    min-width: 13rem;
   }
 }
 
 .tableCell {
-  font-size: 1.8rem !important;
-  color: #666 !important;
+  font-size: 1.8rem;
+  color: #666;
 }
 
 .menuItem {
-  font-size: 1.4rem !important;
+  font-size: 1.4rem;
 }
 
 .table {
-  font-size: 1.4rem !important;
-  padding: 0.8rem 1.6rem !important;
+  font-size: 1.4rem;
+  padding: 0.8rem 1.6rem;
 }
 
 .refresh {

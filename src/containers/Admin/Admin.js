@@ -5,7 +5,6 @@ import { Switch, Route } from 'react-router-dom';
 import Dashboard from './Dashboard/Dashboard';
 import Events from './Events/Events';
 import Grades from './Grades/Grades';
-import Payments from './Payments/Payments';
 import Settings from './Settings/Settings';
 import Students from './Students/Students';
 import Teachers from './Teachers/Teachers';
@@ -20,18 +19,50 @@ import CreateGrade from './Grades/CreateGrade/CreateGrade';
 import Student from './Grades/Student/Student';
 import { useHistory } from 'react-router';
 import Images from './Images/Images';
+import { useSelector } from 'react-redux';
+import { motion } from 'framer-motion';
 
 export const imgUrl =
   'https://blogs-images.forbes.com/danschawbel/files/2017/12/Dan-Schawbel_avatar_1512422077-400x400.jpg';
 
+const adminVariant = {
+  hidden: {
+    opacity: 0,
+  },
+  visible: {
+    opacity: 1,
+    transition: {
+      duration: 0.5,
+      ease: 'linear',
+    },
+  },
+};
 function Admin() {
+  const globalState = useSelector((state) => state.user);
+  const history = useHistory();
+  if (globalState.user === null || globalState.user.role !== 'admin') {
+    return (
+      <div>
+        <p>Not authenticated</p>
+        <Button type='outlined' onClick={() => history.push('/')}>
+          Go back
+        </Button>
+      </div>
+    );
+  }
   return (
-    <div className={classes.admin}>
+    <motion.div
+      className={classes.admin}
+      variants={adminVariant}
+      initial='hidden'
+      animate='visible'
+      exit='hidden'
+    >
       <div className={classes.admin__sidebar}>
         <Sidebar />
       </div>
       <div className={classes.admin__main}>
-        <Header />
+        <Header user={globalState.user} />
         {/* Main content goes here */}
         <div
           style={{
@@ -47,7 +78,6 @@ function Admin() {
             <Route path='/admin/grades/:id' component={Grade} />
             <Route path='/admin/grades' component={Grades} />
             <Route path='/admin/createGrade' component={CreateGrade} />
-            <Route path='/admin/payments' component={Payments} />
             <Route path='/admin/settings' component={Settings} />
             <Route path='/admin/students' component={Students} />
             <Route path='/admin/teachers' component={Teachers} />
@@ -59,11 +89,11 @@ function Admin() {
           </Switch>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
-function Header() {
+function Header(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {
@@ -81,7 +111,7 @@ function Header() {
       <Button
         variant='outlined'
         onClick={() => history.goBack()}
-        style={{ marginRight: 'auto' }}
+        style={{ marginRight: 'auto', fontSize: '1rem' }}
       >
         Go back
       </Button>
@@ -90,8 +120,8 @@ function Header() {
         onClick={handleClick}
         className={classes.admin__main__header__profile}
       >
-        <Avatar src={imgUrl} />
-        <span>Mark</span>
+        <Avatar src={props.user.profilePic} />
+        <span>{props.user.firstname}</span>
       </Button>
       <Menu
         id='simple-menu'

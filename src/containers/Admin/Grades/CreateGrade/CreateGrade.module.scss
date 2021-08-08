@@ -1,15 +1,14 @@
 .grade {
   padding: 1rem;
   min-height: 83vh;
-  color: #666 !important;
+  color: #666;
   button {
-    font-size: 1.6rem !important;
-    text-transform: none !important;
+    text-transform: none;
   }
 
   &__head {
     font-size: 3rem;
-    font-weight: 300 !important;
+    font-weight: 300;
   }
 
   &__form {
@@ -54,9 +53,6 @@
     }
     &__inp {
       width: 100%;
-      & > * {
-        font-size: 1.4rem !important;
-      }
     }
 
     &__add {

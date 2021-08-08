@@ -56,9 +56,6 @@
     gap: 2rem;
     &__inp {
       width: 100%;
-      & > * {
-        font-size: 1.4rem !important;
-      }
     }
   }
 }
@@ -72,6 +69,6 @@
 }
 
 .btn {
-  width: 100% !important;
-  font-size: 1.4rem !important;
+  width: 100%;
+  font-size: 1.4rem;
 }

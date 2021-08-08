@@ -8,7 +8,7 @@
   }
 
   &__menuItem {
-    font-size: 1.4rem !important;
+    font-size: 1.4rem;
   }
 
   &__main {
@@ -27,7 +27,7 @@
 
       &__profile {
         align-self: stretch;
-        padding: 0 2rem !important;
+        padding: 0 2rem;
         span {
           display: flex;
           gap: 1rem;

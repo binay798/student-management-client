@@ -1,7 +1,7 @@
 .user {
   padding: 1rem;
   min-height: 83vh;
-  color: #666 !important;
+  color: #666;
 
   &__head {
     font-size: 3rem;
@@ -34,10 +34,10 @@
     }
 
     &__btn {
-      font-size: 1.4rem !important;
-      text-transform: none !important;
-      margin-left: auto !important;
-      display: flex !important;
+      font-size: 1.4rem;
+      text-transform: none;
+      margin-left: auto;
+      display: flex;
       width: max-content;
     }
 
@@ -50,9 +50,7 @@
   }
 
   &__inp {
-    width: 100% !important;
-    & > * {
-      font-size: 1.4rem !important;
-    }
+    width: 100%;
+    font-size: 1.4rem;
   }
 }

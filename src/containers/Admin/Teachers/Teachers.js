@@ -16,10 +16,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { imgUrl } from '../Admin';
 import axios from './../../../axios-instance/axiosInstance';
 
-import {
-  getAllTeachers,
-  selectUser as SelectUser,
-} from './../../../store/actionCreators/index';
+import { getAllTeachers } from './../../../store/actionCreators/index';
 
 function Progress(props) {
   const progressStyle = {

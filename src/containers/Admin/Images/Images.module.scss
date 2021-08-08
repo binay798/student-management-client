@@ -1,7 +1,7 @@
 .images {
   padding: 1rem;
   min-height: 83vh;
-  color: #666 !important;
+  color: #666;
 
   // display all images
   &__main {
@@ -48,10 +48,7 @@
     }
 
     &__inp {
-      width: 100% !important;
-      & > * {
-        font-size: 1.4rem !important;
-      }
+      width: 100%;
     }
   }
 
@@ -61,7 +58,7 @@
     width: 100%;
     object-fit: contain;
     margin: 0 auto;
-    margin-bottom: 2rem !important;
+    margin-bottom: 2rem;
   }
 }
 
@@ -83,9 +80,8 @@
 }
 
 .btn {
-  font-size: 1.4rem !important;
-  text-transform: none !important;
-  width: 100% !important;
+  text-transform: none;
+  width: 100%;
 }
 
 .img {
@@ -115,10 +111,11 @@
     text-align: center;
 
     button {
-      width: 15rem !important;
-      margin: 0 auto !important;
-      color: white !important;
-      margin-bottom: 1rem !important;
+      width: 15rem;
+      margin: 0 auto;
+      color: white;
+      margin-bottom: 1rem;
+      font-size: 1rem;
     }
   }
 }

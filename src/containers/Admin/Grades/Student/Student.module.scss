@@ -1,7 +1,7 @@
 .student {
   padding: 1rem;
   min-height: 83vh;
-  color: #666 !important;
+  color: #666;
 
   &__head {
     font-size: 3rem;
@@ -24,9 +24,6 @@
       align-items: center;
       gap: 2rem;
       &__inp {
-        & > * {
-          font-size: 1.4rem !important;
-        }
       }
     }
 
@@ -55,6 +52,5 @@
 }
 
 .btn {
-  font-size: 1.4rem !important;
-  text-transform: none !important;
+  text-transform: none;
 }

@@ -34,14 +34,18 @@ function Dashboard(props) {
   // Get total number of students
   const [total, setTotal] = useState('');
   useEffect(() => {
-    (async () => {
+    const fetchData = async () => {
       try {
         let res = await axios.get('/api/v1/users/count');
         setTotal(res.data);
       } catch (err) {
         console.log(err.message);
       }
-    })();
+    };
+    fetchData();
+    return () => {
+      fetchData();
+    };
   }, []);
   return (
     <div className={classes.dashboard}>

@@ -16,6 +16,16 @@ const reducer = (state = initialState, action) => {
         ...state,
         selectedUser: action.payload,
       };
+    case actionTypes.LOGIN:
+      return {
+        ...state,
+        user: action.payload,
+      };
+    case actionTypes.UPDATE_ADMIN:
+      return {
+        ...state,
+        user: action.payload,
+      };
     default:
       return state;
   }

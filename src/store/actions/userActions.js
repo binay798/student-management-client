@@ -1,3 +1,7 @@
 export const SELECT_USER = 'SELECT_USER';
 export const GET_STUDENTS = 'GET_STUDENTS';
 export const UPDATE_SELECTED_USER = 'UPDATE_SELECTED_USER';
+export const LOGIN = 'LOGIN';
+export const UPDATE_ADMIN = 'UPDATE_ADMIN';
+export const FORGOT_PASSWORD = 'FORGOT_PASSWORD';
+export const RESET_PASSWORD = 'RESET_PASSWORD';

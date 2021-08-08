@@ -1,7 +1,7 @@
 .grade {
   padding: 1rem;
   min-height: 83vh;
-  color: #666 !important;
+  color: #666;
 
   &__header {
     display: flex;
@@ -30,11 +30,11 @@
 }
 
 .chip {
-  font-size: 1.3rem !important;
-  padding: 0 1rem !important;
-  font-weight: 600 !important;
+  font-size: 1.3rem;
+  padding: 0 1rem;
+  font-weight: 600;
 }
 .table {
-  font-size: 1.4rem !important;
-  padding: 0.8rem 1.6rem !important;
+  font-size: 1.4rem;
+  padding: 0.8rem 1.6rem;
 }

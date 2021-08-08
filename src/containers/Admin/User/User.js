@@ -35,6 +35,7 @@ function User(props) {
   useEffect(() => {
     // get selected user
     dispatch(getUser(userId, setLoading));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (!props.user.selectedUser) {
