@@ -21,6 +21,18 @@ export const login = (data, setLoading, history) => {
   };
 };
 
+export const logout = (history) => {
+  return async (dispatch) => {
+    try {
+      await axios.get('/api/v1/users/logout');
+      dispatch({ type: actionTypes.LOGOUT });
+      history.push('/');
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
+};
+
 export const getUser = (id, setLoading) => {
   return async (dispatch) => {
     setLoading(true);

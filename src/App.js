@@ -2,10 +2,8 @@ import React, { Suspense } from 'react';
 import './App.css';
 import { Route, Switch, useLocation } from 'react-router-dom';
 import Auth from './containers/Auth/Auth';
-import Snackbar from '@material-ui/core/Snackbar';
-import Button from '@material-ui/core/Button';
 
-import { useSelector, useDispatch } from 'react-redux';
+// import { useDispatch } from 'react-redux';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { AnimatePresence } from 'framer-motion';
 const Admin = React.lazy(() => import('./containers/Admin/Admin'));
@@ -20,41 +18,17 @@ const theme = createMuiTheme({
 
 function App() {
   const location = useLocation();
-  const globalState = useSelector((state) => ({
-    error: state.error,
-    user: state.user,
-  }));
-  const dispatch = useDispatch();
-  const closeSnackbar = () => {
-    dispatch({ type: 'RESET_ERROR' });
-  };
+  // const globalState = useSelector((state) => ({
+  //   error: state.error,
+  //   user: state.user,
+  // }));
+  // const dispatch = useDispatch();
+  // const closeSnackbar = () => {
+  //   dispatch({ type: 'RESET_ERROR' });
+  // };
   return (
     <div className='App'>
       <ThemeProvider theme={theme}>
-        {/* for error */}
-        <Snackbar
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'left',
-          }}
-          autoHideDuration={6000}
-          open={globalState.error.open}
-          onClose={closeSnackbar}
-          message={
-            <p style={{ fontSize: '1.6rem' }}>
-              {globalState.error.errorMessage}
-            </p>
-          }
-          action={
-            <Button
-              style={{ fontSize: '1.4rem', color: 'lightgray' }}
-              onClick={closeSnackbar}
-            >
-              close
-            </Button>
-          }
-        />
-
         <Suspense fallback={'loading...'}>
           <AnimatePresence exitBeforeEnter>
             <Switch location={location} key={location.key}>

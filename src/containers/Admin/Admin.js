@@ -19,8 +19,9 @@ import CreateGrade from './Grades/CreateGrade/CreateGrade';
 import Student from './Grades/Student/Student';
 import { useHistory } from 'react-router';
 import Images from './Images/Images';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { motion } from 'framer-motion';
+import { logout } from './../../store/actionCreators/index';
 
 export const imgUrl =
   'https://blogs-images.forbes.com/danschawbel/files/2017/12/Dan-Schawbel_avatar_1512422077-400x400.jpg';
@@ -95,15 +96,20 @@ function Admin() {
 
 function Header(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const dispatch = useDispatch();
+  const history = useHistory();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = () => {
+  const handleClose = (type) => {
+    if (type === 'logout') {
+      dispatch(logout(history));
+      return;
+    }
     setAnchorEl(null);
   };
-  const history = useHistory();
   return (
     <Paper square elevation={2} className={classes.admin__main__header}>
       <Icon name='ham' style={{ width: '4rem', height: '4rem' }} />
@@ -136,7 +142,10 @@ function Header(props) {
         <MenuItem className={classes.admin__menuItem} onClick={handleClose}>
           My account
         </MenuItem>
-        <MenuItem className={classes.admin__menuItem} onClick={handleClose}>
+        <MenuItem
+          className={classes.admin__menuItem}
+          onClick={() => handleClose('logout')}
+        >
           Logout
         </MenuItem>
       </Menu>

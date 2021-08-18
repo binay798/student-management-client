@@ -5,3 +5,4 @@ export const LOGIN = 'LOGIN';
 export const UPDATE_ADMIN = 'UPDATE_ADMIN';
 export const FORGOT_PASSWORD = 'FORGOT_PASSWORD';
 export const RESET_PASSWORD = 'RESET_PASSWORD';
+export const LOGOUT = 'LOGOUT';

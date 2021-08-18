@@ -137,9 +137,9 @@ function Images() {
             className={classes.images__main}
           >
             {globalState.images &&
-              globalState.images.map((item) => {
+              globalState.images.map((item, id) => {
                 return (
-                  <motion.div variants={imgVariant}>
+                  <motion.div key={id} variants={imgVariant}>
                     <ImageContent
                       key={item._id}
                       copiedImgId={copied}

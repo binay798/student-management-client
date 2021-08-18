@@ -16,6 +16,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { selectUser as SelectUser } from './../../../store/actionCreators/index';
 import { CircularProgress } from '@material-ui/core';
 import axios from './../../../axios-instance/axiosInstance';
+import axiosMain from 'axios';
 
 function Progress(props) {
   const progressStyle = {
@@ -33,10 +34,14 @@ function Progress(props) {
 function Dashboard(props) {
   // Get total number of students
   const [total, setTotal] = useState('');
+
   useEffect(() => {
+    const source = axiosMain.CancelToken.source();
     const fetchData = async () => {
       try {
-        let res = await axios.get('/api/v1/users/count');
+        let res = await axios.get('/api/v1/users/count', {
+          cancelToken: source.token,
+        });
         setTotal(res.data);
       } catch (err) {
         console.log(err.message);
@@ -44,7 +49,7 @@ function Dashboard(props) {
     };
     fetchData();
     return () => {
-      fetchData();
+      source.cancel();
     };
   }, []);
   return (

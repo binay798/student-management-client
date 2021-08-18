@@ -28,6 +28,7 @@ function Auth() {
     (async () => {
       try {
         let res = await axios.get('/api/v1/users/auto-login');
+        console.log(res);
         const user = res.data.user;
         dispatch({ type: LOGIN, payload: user });
       } catch (err) {
