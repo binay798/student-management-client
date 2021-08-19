@@ -139,9 +139,8 @@ function Images() {
             {globalState.images &&
               globalState.images.map((item) => {
                 return (
-                  <motion.div variants={imgVariant}>
+                  <motion.div key={item._id} variants={imgVariant}>
                     <ImageContent
-                      key={item._id}
                       copiedImgId={copied}
                       copied={() => copyUrl(item._id, item.imageUrl)}
                       deleteImage={() => deleteImageById(item._id)}
