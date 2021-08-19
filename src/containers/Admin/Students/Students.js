@@ -16,7 +16,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getStudents } from './../../../store/actionCreators/index';
 import { useHistory, Link } from 'react-router-dom';
 import axios from '../../../axios-instance/axiosInstance';
-import { motion } from 'framer-motion';
 
 const useStyles = makeStyles({
   root: {
@@ -26,16 +25,6 @@ const useStyles = makeStyles({
     maxHeight: 440,
   },
 });
-
-// variants
-const studentVariant = {
-  hidden: {
-    opacity: 0,
-  },
-  visible: {
-    opacity: 1,
-  },
-};
 
 function Progress(props) {
   const progressStyle = {
