@@ -9,7 +9,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 import TableHead from '@material-ui/core/TableHead';
 import TextField from '@material-ui/core/TextField';
-import { Button, CircularProgress } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import Icon from './../../../components/UI/Icon/Icon';
 import { useHistory } from 'react-router';
 import { useSelector, useDispatch } from 'react-redux';
@@ -17,20 +17,8 @@ import { imgUrl } from '../Admin';
 import axios from './../../../axios-instance/axiosInstance';
 
 import { getAllTeachers } from './../../../store/actionCreators/index';
+import Progress from './../../../components/UI/ProgressBar/ProgressBar';
 
-function Progress(props) {
-  const progressStyle = {
-    display: props.loading ? 'flex' : 'none',
-    padding: '4rem',
-    justifyContent: 'center',
-    alignItems: 'center',
-  };
-  return (
-    <div style={progressStyle}>
-      <CircularProgress />
-    </div>
-  );
-}
 function Teachers() {
   const [name, setName] = useState('');
   const [searchTeacherLoading, setSearchTeacherLoading] = useState(false);

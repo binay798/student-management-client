@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import classes from './Students.module.scss';
-import { Paper, CircularProgress } from '@material-ui/core';
+import { Paper } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -16,6 +16,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getStudents } from './../../../store/actionCreators/index';
 import { useHistory, Link } from 'react-router-dom';
 import axios from '../../../axios-instance/axiosInstance';
+import Progress from '../../../components/UI/ProgressBar/ProgressBar';
 
 const useStyles = makeStyles({
   root: {
@@ -25,20 +26,6 @@ const useStyles = makeStyles({
     maxHeight: 440,
   },
 });
-
-function Progress(props) {
-  const progressStyle = {
-    display: props.loading ? 'flex' : 'none',
-    padding: '4rem',
-    justifyContent: 'center',
-    alignItems: 'center',
-  };
-  return (
-    <div style={progressStyle}>
-      <CircularProgress />
-    </div>
-  );
-}
 
 function Students() {
   const [name, setName] = useState('');

@@ -3,7 +3,7 @@ import { Paper } from '@material-ui/core';
 import React from 'react';
 import classes from './User.module.scss';
 import { imgUrl } from './../Admin';
-import { Button, Modal, TextField, CircularProgress } from '@material-ui/core';
+import { Button, Modal, TextField } from '@material-ui/core';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
@@ -11,20 +11,8 @@ import Select from '@material-ui/core/Select';
 import { updateUser, getUser } from './../../../store/actionCreators/index';
 import { connect, useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
+import Progress from '../../../components/UI/ProgressBar/ProgressBar';
 
-function Progress(props) {
-  const progressStyle = {
-    display: props.loading ? 'flex' : 'none',
-    padding: '4rem',
-    justifyContent: 'center',
-    alignItems: 'center',
-  };
-  return (
-    <div style={progressStyle}>
-      <CircularProgress />
-    </div>
-  );
-}
 function User(props) {
   const dispatch = useDispatch();
   const [showEditModal, setShowEditModal] = useState(false);

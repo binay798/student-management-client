@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import classes from './Admin.module.scss';
 import { Paper } from '@material-ui/core';
 import { Switch, Route } from 'react-router-dom';
@@ -63,7 +63,7 @@ function Admin() {
         <Sidebar />
       </div>
       <div className={classes.admin__main}>
-        <Header user={globalState.user} />
+        <Header user={globalState.user} history={history} />
         {/* Main content goes here */}
         <div
           style={{
@@ -95,6 +95,8 @@ function Admin() {
 }
 
 function Header(props) {
+  const dispatch = useDispatch();
+  const [logoutLoading, setLogoutLoading] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const dispatch = useDispatch();
   const history = useHistory();
@@ -105,7 +107,8 @@ function Header(props) {
 
   const handleClose = (type) => {
     if (type === 'logout') {
-      dispatch(logout(history));
+      console.log('logout');
+      dispatch(logout(setLogoutLoading, props.history));
       return;
     }
     setAnchorEl(null);
@@ -146,7 +149,7 @@ function Header(props) {
           className={classes.admin__menuItem}
           onClick={() => handleClose('logout')}
         >
-          Logout
+          {logoutLoading ? 'Logging out...' : 'Logout'}
         </MenuItem>
       </Menu>
     </Paper>
