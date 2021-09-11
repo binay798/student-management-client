@@ -40,13 +40,13 @@ export const getImages = (setLoading) => {
   };
 };
 
-export const deleteImage = (id, setLoading, setStateArr) => {
+export const deleteImage = (id, setLoading) => {
   return async (dispatch) => {
     setLoading(true);
     try {
       let res = await axios.delete(`/api/v1/images/${id}`);
       dispatch({ type: actionTypes.DELETE_IMAGE, payload: res.data.image });
-      initializeState(setStateArr);
+      // initializeState(setStateArr);
       setLoading(false);
     } catch (err) {
       console.log(err.message);

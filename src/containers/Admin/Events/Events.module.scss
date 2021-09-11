@@ -27,6 +27,9 @@
   }
 
   &__form {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
     &__inp {
       display: block;
       width: 100%;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import classes from './Admin.module.scss';
 import { Paper } from '@material-ui/core';
 import { Switch, Route } from 'react-router-dom';
@@ -19,8 +19,9 @@ import CreateGrade from './Grades/CreateGrade/CreateGrade';
 import Student from './Grades/Student/Student';
 import { useHistory } from 'react-router';
 import Images from './Images/Images';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { motion } from 'framer-motion';
+import { logout } from './../../store/actionCreators/index';
 
 export const imgUrl =
   'https://blogs-images.forbes.com/danschawbel/files/2017/12/Dan-Schawbel_avatar_1512422077-400x400.jpg';
@@ -62,7 +63,7 @@ function Admin() {
         <Sidebar />
       </div>
       <div className={classes.admin__main}>
-        <Header user={globalState.user} />
+        <Header user={globalState.user} history={history} />
         {/* Main content goes here */}
         <div
           style={{
@@ -94,13 +95,20 @@ function Admin() {
 }
 
 function Header(props) {
+  const dispatch = useDispatch();
+  const [logoutLoading, setLogoutLoading] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = () => {
+  const handleClose = (type) => {
+    if (type === 'logout') {
+      console.log('logout');
+      dispatch(logout(setLogoutLoading, props.history));
+      return;
+    }
     setAnchorEl(null);
   };
   const history = useHistory();
@@ -136,8 +144,11 @@ function Header(props) {
         <MenuItem className={classes.admin__menuItem} onClick={handleClose}>
           My account
         </MenuItem>
-        <MenuItem className={classes.admin__menuItem} onClick={handleClose}>
-          Logout
+        <MenuItem
+          className={classes.admin__menuItem}
+          onClick={() => handleClose('logout')}
+        >
+          {logoutLoading ? 'Logging out...' : 'Logout'}
         </MenuItem>
       </Menu>
     </Paper>

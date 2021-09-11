@@ -115,8 +115,8 @@ function Events() {
           {loading && <CircularProgress />}
           {!loading && (
             <div className={classes.events__right__container}>
-              {events.map((eve) => (
-                <div className={classes.events__item}>
+              {events.map((eve, id) => (
+                <div key={id} className={classes.events__item}>
                   <h2>{eve.name}</h2>
                   <p>{eve.description}</p>
                 </div>

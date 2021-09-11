@@ -106,8 +106,6 @@ function CreateUser() {
     );
   };
 
-  console.log(formik.errors);
-  console.log(formik.touched);
   return (
     <Paper className={classes.user}>
       <h2 className={classes.user__head}>Create new user</h2>
@@ -185,7 +183,7 @@ function CreateUser() {
                 {...formik.getFieldProps('role')}
                 label='Role'
                 error={formik.errors.role && formik.touched.role}
-                helperText={formik.touched.role && formik.errors.role}
+                // helperText={formik.touched.role && formik.errors.role}
               >
                 <MenuItem value='' style={{ fontSize: '1.4rem' }}>
                   <em>None</em>
@@ -245,7 +243,6 @@ function CreateUser() {
                 name='password'
                 {...formik.getFieldProps('password')}
                 error={formik.errors.password && formik.touched.password}
-                helperText={formik.touched.password && formik.errors.password}
                 endAdornment={
                   <InputAdornment position='end'>
                     <IconButton
@@ -282,10 +279,6 @@ function CreateUser() {
                 error={
                   formik.errors.confirmPassword &&
                   formik.touched.confirmPassword
-                }
-                helperText={
-                  formik.touched.confirmPassword &&
-                  formik.errors.confirmPassword
                 }
                 endAdornment={
                   <InputAdornment position='end'>

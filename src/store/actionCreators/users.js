@@ -21,6 +21,23 @@ export const login = (data, setLoading, history) => {
   };
 };
 
+export const logout = (setLoading, history) => {
+  return async (dispatch) => {
+    setLoading(true);
+    try {
+      await axios.get('/api/v1/users/logout');
+      dispatch({ type: actionTypes.LOGIN, payload: null });
+
+      history.push('/');
+      setLoading(false);
+      return;
+    } catch (err) {
+      console.log(err.message);
+    }
+    setLoading(false);
+  };
+};
+
 export const getUser = (id, setLoading) => {
   return async (dispatch) => {
     setLoading(true);

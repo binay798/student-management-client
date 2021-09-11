@@ -14,23 +14,10 @@ import * as actionCreators from './../../../store/actionCreators/index';
 import { useSelector, useDispatch } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import { selectUser as SelectUser } from './../../../store/actionCreators/index';
-import { CircularProgress } from '@material-ui/core';
 import axios from './../../../axios-instance/axiosInstance';
 import axiosMain from 'axios';
+import Progress from './../../../components/UI/ProgressBar/ProgressBar';
 
-function Progress(props) {
-  const progressStyle = {
-    display: props.loading ? 'flex' : 'none',
-    padding: '4rem',
-    justifyContent: 'center',
-    alignItems: 'center',
-  };
-  return (
-    <div style={progressStyle}>
-      <CircularProgress />
-    </div>
-  );
-}
 function Dashboard(props) {
   // Get total number of students
   const [total, setTotal] = useState('');
