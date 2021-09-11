@@ -3,10 +3,6 @@ import './App.css';
 import { Route, Switch, useLocation } from 'react-router-dom';
 import Auth from './containers/Auth/Auth';
 
-<<<<<<< HEAD
-// import { useDispatch } from 'react-redux';
-=======
->>>>>>> form-validation
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { AnimatePresence } from 'framer-motion';
 const Admin = React.lazy(() => import('./containers/Admin/Admin'));
