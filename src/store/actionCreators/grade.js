@@ -103,3 +103,42 @@ export const getSelectedGrade = (id, setLoading) => {
     setLoading(false);
   };
 };
+
+export const addStudentToGrade = (gradeId, studentId, setLoading) => {
+  return async (dispatch) => {
+    setLoading(true);
+    try {
+      const data = {
+        rollNumber: 0,
+        student: studentId,
+      };
+      let res = await axios.patch(`/api/v1/grade/addStudent/${gradeId}`, data);
+
+      dispatch({ type: SELECT_GRADE, payload: res.data.grade });
+    } catch (err) {
+      console.log(err.message);
+    }
+    setLoading(false);
+  };
+};
+
+export const deleteStudentFromGrade = (
+  gradeId,
+  studentId,
+  setLoading,
+  history
+) => {
+  return async (dispatch) => {
+    setLoading(true);
+    try {
+      await axios.patch(`/api/v1/grade/removeStudent/${gradeId}`, {
+        studentId,
+      });
+      setLoading(false);
+      history.goBack();
+    } catch (err) {
+      console.log(err.message);
+      setLoading(false);
+    }
+  };
+};

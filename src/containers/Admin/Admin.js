@@ -98,7 +98,6 @@ function Header(props) {
   const dispatch = useDispatch();
   const [logoutLoading, setLogoutLoading] = useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const dispatch = useDispatch();
   const history = useHistory();
 
   const handleClick = (event) => {

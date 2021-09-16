@@ -8,9 +8,10 @@ import { CircularProgress } from '@material-ui/core';
 import {
   updateStudentRollNumber,
   getSelectedStudent,
+  deleteStudentFromGrade,
 } from './../../../../store/actionCreators/index';
 import { useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import Result from './Result/Result';
 import Payment from './Payment/Payment';
 
@@ -19,10 +20,12 @@ function Student() {
   const [roll, setRoll] = useState(0);
   const dispatch = useDispatch();
   const history = useHistory();
+  const params = useParams();
   const gradeId = history.location.pathname.split('/')[3];
   const studentId = history.location.pathname.split('/')[4];
   const [loading, setLoading] = useState(false);
   const [rollLoading, setRollLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   useEffect(() => {
     dispatch(getSelectedStudent({ gradeId, studentId }, setLoading));
@@ -44,6 +47,18 @@ function Student() {
           studentId: studentId,
         },
         setRollLoading
+      )
+    );
+  };
+
+  // REMOVE STUDENT
+  const removeStudent = () => {
+    dispatch(
+      deleteStudentFromGrade(
+        params.id,
+        params.studentId,
+        setDeleteLoading,
+        history
       )
     );
   };
@@ -128,6 +143,17 @@ function Student() {
         batch={globalState.batch}
         grade={globalState.grade}
       />
+
+      {/* REMOVE STUDENT FROM CURRENT GRADE */}
+      <Button
+        style={{ marginLeft: 'auto', display: 'block' }}
+        variant='contained'
+        color='secondary'
+        onClick={removeStudent}
+        disabled={deleteLoading}
+      >
+        Remove student
+      </Button>
     </Paper>
   );
 }
