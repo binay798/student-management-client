@@ -31,14 +31,20 @@
     &__top {
       display: flex;
       gap: 2rem;
+      @media only screen and (max-width: 600px) {
+        flex-direction: column;
+      }
     }
 
     &__btn {
       font-size: 1.4rem;
       text-transform: none;
       margin-left: auto;
-      display: flex;
-      width: max-content;
+      display: block;
+      // width: max-content;
+      @media only screen and (max-width: 600px) {
+        width: 100%;
+      }
     }
 
     &__bottom {
@@ -46,6 +52,9 @@
       gap: 2rem;
       margin: 2rem 0;
       align-items: center;
+      @media only screen and (max-width: 600px) {
+        flex-direction: column;
+      }
     }
   }
 

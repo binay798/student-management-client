@@ -350,7 +350,6 @@ function CreateUser() {
             variant='contained'
             className={classes.user__form__btn}
             color='primary'
-            style={{ width: '20rem' }}
             type='submit'
             disabled={loading}
           >

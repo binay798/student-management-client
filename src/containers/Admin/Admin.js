@@ -41,6 +41,7 @@ const adminVariant = {
 function Admin() {
   const globalState = useSelector((state) => state.user);
   const history = useHistory();
+
   if (globalState.user === null || globalState.user.role !== 'admin') {
     return (
       <div>
@@ -112,9 +113,13 @@ function Header(props) {
     }
     setAnchorEl(null);
   };
+
   return (
     <Paper square elevation={2} className={classes.admin__main__header}>
-      <Icon name='ham' style={{ width: '4rem', height: '4rem' }} />
+      <Icon
+        name='ham'
+        style={{ width: '4rem', height: '4rem', cursor: 'pointer' }}
+      />
 
       <Button
         variant='outlined'

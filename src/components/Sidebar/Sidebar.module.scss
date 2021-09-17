@@ -10,6 +10,9 @@
     height: 7rem;
     padding: 0 1rem;
     justify-content: center;
+    @media only screen and (max-width: 950px) {
+      display: none;
+    }
   }
 
   &__container {
@@ -37,4 +40,18 @@
 
 .active {
   background-color: #3f51b5;
+}
+
+.item {
+  display: block;
+  @media only screen and (max-width: 950px) {
+    display: none;
+  }
+}
+
+.icon {
+  @media only screen and (max-width: 950px) {
+    width: 3rem;
+    height: 3rem;
+  }
 }

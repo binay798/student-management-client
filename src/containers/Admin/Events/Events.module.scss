@@ -4,6 +4,9 @@
     display: flex;
     gap: 3rem;
     height: 100%;
+    @media only screen and (max-width: 800px) {
+      flex-direction: column;
+    }
   }
 
   &__item {

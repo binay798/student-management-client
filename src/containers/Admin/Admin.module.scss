@@ -5,6 +5,10 @@
     width: 25rem;
     background-color: var(--color-dark);
     height: 100%;
+    transition: 0.3s;
+    @media only screen and (max-width: 950px) {
+      width: 6rem;
+    }
   }
 
   &__menuItem {
@@ -24,6 +28,9 @@
       gap: 2rem;
       position: relative;
       z-index: 20;
+      @media only screen and (max-width: 500px) {
+        padding: 0 1rem;
+      }
 
       &__profile {
         align-self: stretch;

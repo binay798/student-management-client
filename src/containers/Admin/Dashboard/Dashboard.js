@@ -85,7 +85,6 @@ const useStyles = makeStyles({
 });
 
 const TopStudentsTable = (props) => {
-  const styles = useStyles();
   const globalState = useSelector((state) => state.students);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
@@ -103,9 +102,9 @@ const TopStudentsTable = (props) => {
     props.history.push(`/admin/user/${user._id}`);
   };
   return (
-    <Paper className={classes.topStudents}>
-      <TableContainer component={Paper} className={styles.container}>
-        <Table stickyHeader aria-label='sticky table'>
+    <Paper className={classes.topStudents} style={{ overflowY: 'scroll' }}>
+      <TableContainer component={Paper}>
+        <Table sx={{ minWidth: 650 }} stickyHeader aria-label='sticky table'>
           <TableHead>
             <TableRow className={classes.topStudents__tableRow}>
               <TableCell>Top Students</TableCell>
@@ -122,6 +121,7 @@ const TopStudentsTable = (props) => {
                 <TableRow
                   key={row._id}
                   className={classes.topStudents__tableCell}
+                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                 >
                   <TableCell component='th' scope='row'>
                     {row.firstname} {row.lastname}

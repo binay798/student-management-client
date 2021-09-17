@@ -16,15 +16,23 @@
     gap: 3rem;
     height: 100%;
     align-items: flex-start;
+
+    @media only screen and (max-width: 750px) {
+      flex-direction: column;
+    }
     &__left {
       flex: 3;
       padding: 1rem;
       min-height: 83vh;
+      @media only screen and (max-width: 750px) {
+        flex: 1;
+      }
     }
 
     &__right {
       flex: 1;
       padding: 1rem;
+      width: 100%;
     }
   }
 
@@ -32,6 +40,9 @@
     display: flex;
     gap: 2rem;
     align-items: center;
+    @media only screen and (max-width: 550px) {
+      flex-direction: column;
+    }
   }
 
   &__form {
