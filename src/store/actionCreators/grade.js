@@ -142,3 +142,31 @@ export const deleteStudentFromGrade = (
     }
   };
 };
+
+export const addSubjectToGrade = (data, gradeId, setLoading) => {
+  return async (dispatch) => {
+    setLoading(true);
+    try {
+      let res = await axios.patch(`/api/v1/grade/addSubject/${gradeId}`, data);
+      dispatch({ type: SELECT_GRADE, payload: res.data.grade });
+    } catch (err) {
+      console.log(err.message);
+    }
+    setLoading(false);
+  };
+};
+
+export const removeSubjectFromGrade = (data, gradeId, setLoading) => {
+  return async (dispatch) => {
+    setLoading(true);
+    try {
+      let res = await axios.patch(`/api/v1/grade/removeSubject/${gradeId}`, {
+        subjectId: data,
+      });
+      dispatch({ type: SELECT_GRADE, payload: res.data.grade });
+    } catch (err) {
+      console.log(err.message);
+    }
+    setLoading(false);
+  };
+};

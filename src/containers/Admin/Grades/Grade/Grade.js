@@ -16,13 +16,18 @@ import {
   Button,
   Modal,
   TextField,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
 } from '@material-ui/core';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import Icon from '../../../../components/UI/Icon/Icon';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   getSelectedGrade,
   addStudentToGrade,
+  addSubjectToGrade,
+  removeSubjectFromGrade,
 } from './../../../../store/actionCreators/index';
 import axios from './../../../../axios-instance/axiosInstance';
 
@@ -367,6 +372,14 @@ function SearchedStudentsList(props) {
 
 function SubjectTable(props) {
   const styles = useStyles();
+  const dispatch = useDispatch();
+  const params = useParams();
+  const [removeSubjectLoading, setRemoveSubjectLoading] = useState(false);
+
+  const removeSubject = (data) => {
+    dispatch(removeSubjectFromGrade(data, params.id, setRemoveSubjectLoading));
+    // console.log(data, params.id);
+  };
 
   return (
     <>
@@ -436,7 +449,12 @@ function SubjectTable(props) {
                         {row.teacher.mobile}
                       </TableCell>
                       <TableCell className={classes.table} align='right'>
-                        <Button variant='outlined' color='secondary'>
+                        <Button
+                          onClick={() => removeSubject(row._id)}
+                          variant='outlined'
+                          color='secondary'
+                          disabled={removeSubjectLoading}
+                        >
                           <Icon name='trash' />
                         </Button>
                       </TableCell>
@@ -469,11 +487,48 @@ function SubjectTable(props) {
 }
 
 function AddSubjectModal(props) {
+  const dispatch = useDispatch();
+  const params = useParams();
   const [open, setOpen] = React.useState(false);
+  const [searchTeacherLoading, setSearchTeacherLoading] = useState(false);
+  const [searchedTeachers, setSearchedTeachers] = useState(null);
+  const [selectedTeacher, setSelectedTeacher] = useState('');
+  const [name, setName] = useState('');
+  const [subjectName, setSubjectName] = useState('');
+  const [addSubjectLoading, setAddSubjectLoading] = useState(false);
   const styles = useStyles();
+  // search teacher based on name
+  const searchTeacher = async (e) => {
+    e.preventDefault();
+    setSearchTeacherLoading(true);
+    try {
+      if (name === '') throw new Error('Enter valid name');
+      let res = await axios.get('/api/v1/users/searchUser/teacher/' + name);
+      setSearchedTeachers(res.data.users);
+    } catch (err) {
+      console.log(err.message);
+    }
+    setSearchTeacherLoading(false);
+    setName('');
+  };
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  // UPLOAD NEW SUBJECT TO DATABASE
+  const addSubject = (e) => {
+    e.preventDefault();
+    console.log(subjectName, selectedTeacher, params);
+    if (subjectName !== '' && selectedTeacher !== '') {
+      dispatch(
+        addSubjectToGrade(
+          { name: subjectName, teacher: selectedTeacher },
+          params.id,
+          setAddSubjectLoading
+        )
+      );
+    }
   };
   return (
     <div>
@@ -492,12 +547,14 @@ function AddSubjectModal(props) {
         aria-describedby='simple-modal-description'
       >
         <Paper className={classes.modal}>
-          <form className={classes.modal__form}>
+          <form onSubmit={addSubject} className={classes.modal__form}>
             <TextField
               id='outlined-basic'
               label='Subject name'
               variant='outlined'
               classes={{ root: styles.inp }}
+              value={subjectName}
+              onChange={(e) => setSubjectName(e.target.value)}
             />
             <div className={styles.flex}>
               <TextField
@@ -506,17 +563,58 @@ function AddSubjectModal(props) {
                 variant='outlined'
                 classes={{ root: styles.inp }}
                 style={{ width: '100%' }}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
               />
-              <Button variant='contained' color='primary'>
+              <Button
+                variant='contained'
+                color='primary'
+                onClick={searchTeacher}
+                disabled={searchTeacherLoading}
+              >
                 <Icon name='search' style={{ fill: 'white' }} />
               </Button>
             </div>
+            <RadioGroup
+              aria-label='gender'
+              name='gender1'
+              value={selectedTeacher}
+              onChange={(e) => setSelectedTeacher(e.target.value)}
+              style={{ width: '100%' }}
+            >
+              {searchedTeachers &&
+                searchedTeachers.map((item) => {
+                  return (
+                    <FormControlLabel
+                      value={item._id}
+                      control={<Radio />}
+                      key={item._id}
+                      style={{ marginBottom: '1rem' }}
+                      label={
+                        <div
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '1rem',
+                          }}
+                        >
+                          <Avatar alt='name' src={item.profilePic} />
+                          <p>
+                            {item.firstname} {item.lastname}
+                          </p>
+                        </div>
+                      }
+                    />
+                  );
+                })}
+            </RadioGroup>
 
             <Button
               classes={{ root: styles.btn }}
               variant='contained'
               color='secondary'
               type='submit'
+              disabled={addSubjectLoading}
             >
               Add
             </Button>

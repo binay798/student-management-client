@@ -125,8 +125,6 @@ function CreatePaymentModal(props) {
   return (
     <Modal open={props.open} onClose={props.onClose}>
       <Paper className={classes.createPaymentModal}>
-        <h2>Create Payment</h2>
-
         {imgSrc ? (
           <img className={classes.preview} src={imgSrc} alt='preview' />
         ) : (
@@ -152,11 +150,12 @@ function CreatePaymentModal(props) {
             value={imgSrc}
             onChange={(e) => setImgSrc(e.target.value)}
           />
+
           <TextField
             label='Description'
             className={classes.createPaymentModal__form__inp}
             multiline
-            rows={6}
+            rows={3}
             variant='outlined'
             value={paymentDescription}
             onChange={(e) => setPaymentDescription(e.target.value)}

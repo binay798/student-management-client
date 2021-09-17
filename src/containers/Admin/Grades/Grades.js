@@ -194,9 +194,9 @@ function StickyHeadTable(props) {
                         <Icon name='eye' style={{ fill: '#444' }} />
                       </IconButton>
 
-                      <IconButton>
+                      {/* <IconButton>
                         <Icon name='edit' style={{ fill: '#3f51b5' }} />
-                      </IconButton>
+                      </IconButton> */}
                     </TableCell>
                   </TableRow>
                 );
